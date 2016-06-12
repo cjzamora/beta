@@ -143,7 +143,8 @@ page.onLoadFinished = function(status) {
                 // get default computed style
                 var defaults = document.defaultView.getComputedStyle(document.body);
                 // get the computed style for target element
-                var computed = document.defaultView.getComputedStyle(element);
+                // var computed = document.defaultView.getComputedStyle(element);
+                var computed = window.getComputedStyle(element);
 
                 var data = {};
 
@@ -159,11 +160,12 @@ page.onLoadFinished = function(status) {
                     }
 
                     // don't care about default value
-                    if(computed[key] === defaults[key]) {
+                    if(computed[key] === defaults[key]
+                    && ['font-weight'].indexOf(key) === -1) {
                         return;
                     }
 
-                    data[key] = defaults[key];
+                    data[key] = computed[key];
                 });
 
                 return data;
@@ -307,10 +309,23 @@ page.onLoadFinished = function(status) {
                 continue;
             }
 
+            // has inner text?
+            if(node.innerText.length > 0) {
+                // have we seen this node?
+                if(node.__features) {
+                    // just push the text
+                    node.__features.text.push(_utils.clean(_utils.trim(text.nodeValue)));
+                    continue;
+                }
+
+                setNodeFeatures(node);
+            }
+
             // find the parent node that is a block
             while(node) {
                 // get computed styles
-                var computed = document.defaultView.getComputedStyle(node);
+                // var computed = document.defaultView.getComputedStyle(node);
+                var computed = window.getComputedStyle(node);
 
                 // do we find the block parent?
                 if((parseInt(computed.width) * parseInt(computed.height)) > 0) {
@@ -326,6 +341,17 @@ page.onLoadFinished = function(status) {
                 }
             }
 
+            // parent element is ul?
+            if(node.parentElement.tagName == 'UL') {
+                // have we seen this node?
+                if(node.parentElement.__features) {
+                    // just push the text
+                    node.parentElement.__features.text.push(_utils.clean(_utils.trim(text.nodeValue)));
+                } else {
+                    setNodeFeatures(node.parentElement);
+                }
+            }
+
             // have we seen this node?
             if(node.__features) {
                 // just push the text
@@ -333,15 +359,40 @@ page.onLoadFinished = function(status) {
                 continue;
             }
 
+            setNodeFeatures(node);
+        }     
+
+        // annotate element
+        function annotateElement(e) {
+            // get annotation label
+            var label   = prompt('Enter element label: ');
+            // get node index
+            var id      = e.target.getAttribute('data-annotate-id');
+
+            // if label is valid
+            if(LABELS.indexOf(label) === -1) {
+                return;
+            }
+
+            // set annotation label
+            data.texts[id].label = label;
+            // set text
+            e.target.innerText = e.target.innerText + ' (' + label.toUpperCase() + ') ';
+        };
+
+        // set node data helper
+        function setNodeFeatures(node) {
             // collect features
             node.__features = {
+                label    : 'unknown',
                 element  : _utils.element(node),
                 path     : _utils.path(node, true),
                 selector : _utils.path(node),
                 text     : [_utils.clean(_utils.trim(text.nodeValue))],
                 html     : node.innerHTML,
                 bound    : _utils.bound(node),
-                computed : _utils.computed(node)
+                computed : _utils.computed(node),
+                parent   : true
             }
 
             // push text features
@@ -349,7 +400,7 @@ page.onLoadFinished = function(status) {
 
             // debug
             node.style.border = '1px solid red';
-        }       
+        };
 
         return texts;
     });

@@ -13,9 +13,9 @@ def main(args):
     # get extractor path
     extractor = utils.get_path('extractor')
     # get site name
-    site_name = utils.process_url(args.url).site_name
+    site_name = utils.process_url(args.url)['site_name']
     # generate site id
-    site_id   = utils.process_url(args.url).site_id
+    site_id   = utils.process_url(args.url)['site_id']
 
     # output path
     output_path = os.path.join(utils.get_path('tmp'), site_id)

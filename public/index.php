@@ -14,10 +14,7 @@ if(isset($_POST['training'])) {
 
         // save it!
         file_put_contents(
-            $output . $hash, 
-            '// SITE_URL: ' . $training['href'] . PHP_EOL . 
-            json_encode($training['training'], 
-            JSON_PRETTY_PRINT));
+            $output . $hash, json_encode($training['training'], JSON_PRETTY_PRINT));
 
         die('Training data saved.');
     } catch (\Exception $e) {

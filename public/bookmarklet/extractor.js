@@ -256,6 +256,18 @@
                 continue;
             }
 
+            // has inner text?
+            if(node.innerText.length > 0) {
+                // have we seen this node?
+                if(node.__features) {
+                    // just push the text
+                    node.__features.text.push(_utils.clean(_utils.trim(text.nodeValue)));
+                    continue;
+                }
+
+                setNodeFeatures(node);
+            }
+
             // find the parent node that is a block
             while(node) {
                 // get computed styles
@@ -264,11 +276,6 @@
 
                 // do we find the block parent?
                 if((parseInt(computed.width) * parseInt(computed.height)) > 0) {
-                    break;
-                }
-
-                // has inner text?
-                if(node.innerText.length > 0) {
                     break;
                 }
 
@@ -281,6 +288,17 @@
                 }
             }
 
+            // parent element is ul?
+            if(node.parentElement.tagName == 'UL') {
+                // have we seen this node?
+                if(node.parentElement.__features) {
+                    // just push the text
+                    node.parentElement.__features.text.push(_utils.clean(_utils.trim(text.nodeValue)));
+                } else {
+                    setNodeFeatures(node.parentElement);
+                }
+            }
+
             // have we seen this node?
             if(node.__features) {
                 // just push the text
@@ -288,26 +306,7 @@
                 continue;
             }
 
-            // collect features
-            node.__features = {
-                label    : 'unknown',
-                element  : _utils.element(node),
-                path     : _utils.path(node, true),
-                selector : _utils.path(node),
-                text     : [_utils.clean(_utils.trim(text.nodeValue))],
-                html     : node.innerHTML,
-                bound    : _utils.bound(node),
-                computed : _utils.computed(node)
-            }
-
-            // push text features
-            texts.push(node.__features);
-
-            // push extracted
-            ext.push(node);
-
-            // debug
-            node.style.border = '1px solid red';
+            setNodeFeatures(node);
         }
 
         // iterate on each node
@@ -317,15 +316,23 @@
             // get node text
             var t = ext[i].__features.text.join(' ').substring(0, 60);
 
-            d.innerText             = '+  ' + t;
+            d.innerText             = '+';
             d.style.boxSizing       = 'border-box';
-            d.style.backgroundColor = 'red';
+            d.style.backgroundColor = 'rgba(255, 0, 0, 0.8)';
+            d.style.bottom          = '0px';
             d.style.color           = '#FFFFFF';
             d.style.cursor          = 'pointer';
             d.style.fontFamily      = 'Arial, sans-seif';
             d.style.fontSize        = '8px';
-            d.style.height          = '20px';
-            d.style.padding         = '5px';
+            d.style.height          = '8px';
+            d.style.lineHeight      = '9px';
+            d.style.padding         = '0px 2px';
+            d.style.position        = 'relative';
+            d.style.minWidth        = '9px';
+
+            if(!ext[i].__features.parent) {
+                d.style.right = '0px';
+            }
 
             // set annotation index
             d.setAttribute('data-annotate-id', i);
@@ -352,6 +359,31 @@
             data.texts[id].label = label;
             // set text
             e.target.innerText = e.target.innerText + ' (' + label.toUpperCase() + ') ';
+        };
+
+        // set node data helper
+        function setNodeFeatures(node) {
+            // collect features
+            node.__features = {
+                label    : 'unknown',
+                element  : _utils.element(node),
+                path     : _utils.path(node, true),
+                selector : _utils.path(node),
+                text     : [_utils.clean(_utils.trim(text.nodeValue))],
+                html     : node.innerHTML,
+                bound    : _utils.bound(node),
+                computed : _utils.computed(node),
+                parent   : true
+            }
+
+            // push text features
+            texts.push(node.__features);
+
+            // push extracted
+            ext.push(node);
+
+            // debug
+            node.style.border = '1px solid red';
         };
 
         return texts;
@@ -418,6 +450,7 @@
         for(var i in data.texts) {
             // feature set
             var set = {
+                href        : window.location.href,
                 bound       : data.texts[i].bound,
                 computed    : data.texts[i].computed,
                 element     : data.texts[i].element,

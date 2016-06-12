@@ -99,6 +99,10 @@ def make_dir(path):
         # create directory
         os.makedirs(path)
 
+# pretty print object
+def pretty(object):
+    print json.dumps(object, indent=2).encode('utf8')
+
 # log colors
 def log(message, type='default', newlines=0):
     print LOG_COLORS[type] % message
