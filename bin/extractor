@@ -1,0 +1,65 @@
+#!/usr/bin/env python
+
+import os
+import sys
+import argparse
+import subprocess
+
+sys.path.append('..')
+
+from beta.src import utils
+
+def main(args):
+    # get extractor path
+    extractor = utils.get_path('extractor')
+    # get site name
+    site_name = utils.process_url(args.url).site_name
+    # generate site id
+    site_id   = utils.process_url(args.url).site_id
+
+    # output path
+    output_path = os.path.join(utils.get_path('tmp'), site_id)
+
+    # site already extracted?
+    if utils.file_exists(output_path + '.json'):
+        print 'site already extracted.'
+        sys.exit()
+
+    # check if render
+    if args.image == None:
+        args.image = 'false'
+
+    # generate command
+    command = utils.get_command('phantomjs')
+
+    # execute command
+    utils.log('[extractor] Extracting %s' % args.url, 'system')
+
+    subprocess.call(command % {
+        'extractor' : extractor,
+        'url'       : args.url,
+        'output'    : output_path,
+        'render'    : args.image
+    }, shell=True)
+
+    utils.log('[extractor] %s extracted, output saved to %s' % (args.url, output_path + '.json'), 'success')
+    
+
+# argument parser
+def parse_args():
+    # initialize argument parser
+    parser = argparse.ArgumentParser(prog='extractor', description='PhantomJS Web Page Extractor.')
+
+    # set url argument
+    parser.add_argument('-u', '--url', nargs='?', const=str, required=True, help='webpage url to extract e.g http://galleon.ph/product/124')
+    # set url files path
+    parser.add_argument('-f', '--url-file', nargs='?', const=str, required=False, help='urls file path to extract')
+    # set reset argument
+    parser.add_argument('-r', '--reset', nargs='?', const=int, required=False, help='remove existing extracted, clustered and trained data')
+    # set render argument
+    parser.add_argument('-i', '--image', nargs='?', const=bool, required=False, help='render extracted webpage as image')
+
+    return parser.parse_args()
+
+if __name__ == '__main__':
+    main(parse_args());

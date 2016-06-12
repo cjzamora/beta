@@ -1,0 +1,19 @@
+{
+    "confidence" : 1.0,
+    "score"      : 1000.0,
+    "paths"      : {
+        "conf"          : "conf/",
+        "bin"           : "bin/",
+        "data"          : "data/",
+        "models"        : "data/models",
+        "nlp"           : "data/nlp",
+        "urls"          : "data/urls",
+        "training"      : "data/training",
+        "src"           : "src/",
+        "tmp"           : "tmp/",
+        "extractor"     : "src/extractor/extractor.js"
+    },
+    "commands" : {
+        "phantomjs" : "phantomjs %(extractor)s %(url)s %(output)s %(render)s > %(output)s.log 2>&1"
+    }
+}
