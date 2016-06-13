@@ -12,35 +12,60 @@ from beta.src import utils
 # discrete - can only take certain values
 # continuous - can take any values (within the given range)
 
-training_data = json.loads(open('data/training/7c8d733af92973d7284e6bc1bd75f745.json').read())
-testing_data  = json.loads(open('tmp/537f5cc1d2bfb4b6b971818ff3ae0697.json').read())
-
-training_parsed = Processor().prepare(training_data)
-testing_parsed  = Processor().prepare(testing_data['texts'])
+# training_data = json.loads(open('data/training/152b50573f16ebc9172ade2da72fb218.json').read())
+training_data = utils.load_training()
+testing_data  = json.loads(open('tmp/3f8c73d049f1265bdfdb910c6ea4f97e.json').read())
 
 vectorizer = DictVectorizer()
 
-training_labels     = training_parsed['labels']
-training_features   = vectorizer.fit_transform(training_parsed['features']).toarray()
+training_processed = Processor().prepare_training(training_data, vectorizer)
+testing_processed  = Processor().prepare_testing(testing_data['texts'], vectorizer)
 
-testing_features    = vectorizer.transform(testing_parsed['features']).toarray()
+training_labels   = training_processed['labels']
 
-training_features = np.array(training_features).astype(np.float64)
-testing_features  = np.array(testing_features).astype(np.float64)
+training_features = training_processed['features']
+testing_features  = testing_processed['features']
 
-clf = svm.SVC(kernel='linear')
+clf = svm.SVC(
+        C=1.0, 
+        kernel='linear', 
+        degree=3, 
+        gamma='auto', 
+        coef0=0.0, 
+        shrinking=True, 
+        probability=False, 
+        tol=0.001, 
+        cache_size=2000, 
+        class_weight=None, 
+        verbose=True, 
+        max_iter=-1, 
+        decision_function_shape='ovr', 
+        random_state=None)
 
 clf.fit(training_features, training_labels)
 
 results = clf.predict(testing_features)
 
 index = 0
+predicted = {}
+
+for i in results:
+    if i != 'unknown':
+        predicted[i] = []
 
 for i in results:
     if i != 'unknown':
         text = testing_data['texts'][index]['text']
-        text = '\n'.join(text)
 
-        print i + ': ' + text[0:100]
+        if i == 'title':
+            text = text[0]
+
+        if i == 'description':
+            text = '\n'.join(text[1:])
+
+        predicted[i].append(text)
 
     index = index + 1
+
+print predicted
+utils.write_file('public/test_results.json', predicted, True)

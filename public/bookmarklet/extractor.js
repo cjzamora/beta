@@ -450,7 +450,7 @@
         for(var i in data.texts) {
             // feature set
             var set = {
-                href        : window.location.href,
+                href        : encodeURIComponent(window.location.href),
                 bound       : data.texts[i].bound,
                 computed    : data.texts[i].computed,
                 element     : data.texts[i].element,
@@ -470,7 +470,7 @@
             training.push(set);
         }
 
-        var request = XMLHttpRequest();
+        var request = new XMLHttpRequest();
 
         request.open('POST', window.__SERVER_URL + 'index.php', true);
         request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -490,7 +490,7 @@
             alert(response);
         }
 
-        request.send('training=' + JSON.stringify({ 'training' : training, 'href' : window.location.href }));
+        request.send('training=' + JSON.stringify({ 'training' : training, 'href' : encodeURIComponent(window.location.href) }));
     };
 
     document.body.appendChild(button);

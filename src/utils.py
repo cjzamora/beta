@@ -8,6 +8,7 @@ import hashlib
 import shutil
 import subprocess
 import simplejson as json
+import numpy as np
 
 # get root path
 ROOT_PATH = os.path.abspath(os.getcwd())
@@ -70,9 +71,17 @@ def read_file(path, asJson=False):
         return data
 
 # write file from path
-def write_file():
-    # ...
-    print 'hello'
+def write_file(path, data, isJson=False):
+    # open file for writing
+    with open(path, 'w+') as f:
+        if isJson == True:
+            f.write(json.dumps(data, indent=2, ensure_ascii=False).encode('utf8'))
+
+            return True
+
+        f.write(data)
+
+        return True
 
 # check if file exists
 def file_exists(path):
@@ -80,6 +89,38 @@ def file_exists(path):
         return False
 
     return True
+
+# load training data
+def load_training():
+    # get training path
+    path = get_path('training')
+
+    # training files
+    files = []
+
+    # iterate on training folder
+    for file in os.listdir(path):
+        # get all json training data
+        if file.endswith('json'):
+            files.append(os.path.join(path, file))
+
+    # training data's
+    training = []
+
+    # iterate on each file and read it
+    for i in files:
+        data = json.loads(open(i).read())
+
+        # skip empty data
+        if data == None:
+            continue
+
+        # iterate on each data
+        for k in data:
+            # append to training data
+            training.append(k)
+
+    return training
 
 # process url
 def process_url(url):

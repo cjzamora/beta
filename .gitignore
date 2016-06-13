@@ -1,0 +1,5 @@
+# ignore tmp folder
+tmp/
+
+# ignore compiled
+*.pyc
