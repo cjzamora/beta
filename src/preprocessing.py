@@ -29,7 +29,7 @@ class Processor():
             computed = i['computed']
 
             # convert units
-            computed = self.convert_units(computed, ['font-size'])
+            # computed = self.convert_units(computed, ['font-size'])
 
             # set tag path
             computed['tag-path'] = ' > '.join(i['path'])
@@ -54,10 +54,10 @@ class Processor():
         prepared['features'] = vectorizer.fit_transform(prepared['features']).toarray()
 
         # convert vector, i don't know if this will take effect
-        prepared['features'] = np.array(prepared['features']).astype(np.float64)
+        prepared['features'] = np.array(prepared['features']).astype(np.float32)
 
         # scale features
-        prepared['features'] = preprocessing.scale(prepared['features'])
+        # prepared['features'] = preprocessing.scale(prepared['features'])
 
         return prepared
 
@@ -70,10 +70,10 @@ class Processor():
         prepared['features'] = vectorizer.transform(prepared['features']).toarray()
 
         # convert vector, i don't know if this will take effect
-        prepared['features'] = np.array(prepared['features']).astype(np.float64)
+        prepared['features'] = np.array(prepared['features']).astype(np.float32)
 
         # scale features
-        prepared['features'] = preprocessing.scale(prepared['features'])
+        # prepared['features'] = preprocessing.scale(prepared['features'])
 
         return prepared
 

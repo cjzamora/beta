@@ -3,6 +3,7 @@ from sklearn.feature_extraction import DictVectorizer
 import numpy as np
 import simplejson as json
 import sys
+import random
 
 sys.path.append('..')
 
@@ -26,6 +27,8 @@ training_labels   = training_processed['labels']
 training_features = training_processed['features']
 testing_features  = testing_processed['features']
 
+# training_features = random.sample(training_features, len(training_features))
+
 clf = svm.SVC(
         C=1.0, 
         kernel='linear', 
@@ -33,13 +36,13 @@ clf = svm.SVC(
         gamma='auto', 
         coef0=0.0, 
         shrinking=True, 
-        probability=False, 
+        probability=True, 
         tol=0.001, 
         cache_size=2000, 
-        class_weight=None, 
+        class_weight='balanced', 
         verbose=True, 
         max_iter=-1, 
-        decision_function_shape='ovr', 
+        decision_function_shape=None, 
         random_state=None)
 
 clf.fit(training_features, training_labels)

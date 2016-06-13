@@ -316,6 +316,13 @@
             // get node text
             var t = ext[i].__features.text.join(' ').substring(0, 60);
 
+            // is this our annotator?
+            if(ext[i].getAttribute('data-annotate-id') !== null) {
+                continue;
+            }
+
+            ext[i].style.position = 'relative';
+
             d.innerText             = '+';
             d.style.boxSizing       = 'border-box';
             d.style.backgroundColor = 'rgba(255, 0, 0, 0.8)';
@@ -327,7 +334,7 @@
             d.style.height          = '8px';
             d.style.lineHeight      = '9px';
             d.style.padding         = '0px 2px';
-            d.style.position        = 'relative';
+            d.style.position        = 'absolute';
             d.style.minWidth        = '9px';
 
             if(!ext[i].__features.parent) {
