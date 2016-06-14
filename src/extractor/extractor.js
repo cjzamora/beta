@@ -5,8 +5,8 @@ var json   = require('./lib/json2');
 
 // set viewport size
 page.viewportSize = {
-    width   : 1600,
-    height  : 4000
+    width   : 1265,
+    height  : 2867
 };
 
 // debug info
@@ -133,7 +133,7 @@ page.onLoadFinished = function(status) {
                     element = element.parentElement;
                 }
 
-                path.sort()
+                // path.sort()
 
                 return path;
             },
@@ -149,8 +149,10 @@ page.onLoadFinished = function(status) {
                 var data = {};
 
                 computed.forEach(function(key) {
-                    // don't care about dimension, let bound track that
-                    if(['width', 'height', 'top', 'left', 'right', 'bottom'].indexOf(key) !== -1) {
+                    // don't care about dimension, let bound track that, we also don't care
+                    // about some of the CSS3 3D properties
+                    if(['width', 'height', 'top', 'left', 'right', 'bottom',
+                        'perspective-origin', 'transform-origin'].indexOf(key) !== -1) {
                         return;
                     }
 
@@ -281,6 +283,7 @@ page.onLoadFinished = function(status) {
     // extract texts
     data.texts = page.evaluate(function() {
         var texts = [];
+        var ext   = [];
 
         // walk over all text in the page
         var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
@@ -318,7 +321,7 @@ page.onLoadFinished = function(status) {
                     continue;
                 }
 
-                setNodeFeatures(node);
+                setNodeFeatures(node, false);
             }
 
             // find the parent node that is a block
@@ -348,7 +351,7 @@ page.onLoadFinished = function(status) {
                     // just push the text
                     node.parentElement.__features.text.push(_utils.clean(_utils.trim(text.nodeValue)));
                 } else {
-                    setNodeFeatures(node.parentElement);
+                    setNodeFeatures(node.parentElement, true);
                 }
             }
 
@@ -359,8 +362,58 @@ page.onLoadFinished = function(status) {
                 continue;
             }
 
-            setNodeFeatures(node);
-        }     
+            setNodeFeatures(node, true);
+        }
+
+        // iterate on each node
+        for(var i in ext) {
+            // create element
+            var d = document.createElement('div');
+            // get node text
+            var t = ext[i].__features.text.join(' ').substring(0, 60);
+
+            // is this our annotator?
+            if(ext[i].getAttribute('data-annotate-id') !== null) {
+                continue;
+            }
+
+            ext[i].style.position = 'relative';
+
+            d.innerText             = '+';
+            d.style.boxSizing       = 'border-box';
+            d.style.backgroundColor = 'rgba(255, 0, 0, 0.8)';
+            d.style.bottom          = '0px';
+            d.style.color           = '#FFFFFF';
+            d.style.cursor          = 'pointer';
+            d.style.fontFamily      = 'Arial, sans-seif';
+            d.style.fontSize        = '8px';
+            d.style.lineHeight      = '9px';
+            d.style.padding         = '0px 2px';
+            d.style.position        = 'absolute';
+            d.style.minWidth        = '9px';
+
+            d.setAttribute('data-annotate-parent', ext[i].__features.parent ? 'true' : 'false');
+
+            if(!ext[i].__features.parent) {
+                d.style.right = '0px';
+                d.style.backgroundColor = 'rgba(0, 203, 0, 0.8)';
+            }
+
+            // set annotation index
+            d.setAttribute('data-annotate-id', i);
+
+            // set annotator
+            d.onclick = annotateElement;
+
+            // set on mouse over
+            d.onmouseover = function (e) { e.target.parentElement.style.backgroundColor = 'rgba(0, 203, 0, 0.8)'; };
+            // set on mouse out
+            d.onmouseout = function(e) { e.target.parentElement.style.backgroundColor = ''; };
+
+            ext[i].appendChild(d);
+
+            ext[i].onclick = function(e) { e.preventDefault(); };
+        }       
 
         // annotate element
         function annotateElement(e) {
@@ -381,7 +434,9 @@ page.onLoadFinished = function(status) {
         };
 
         // set node data helper
-        function setNodeFeatures(node) {
+        function setNodeFeatures(node, parent) {
+            parent = parent ? true : false;
+
             // collect features
             node.__features = {
                 label    : 'unknown',
@@ -392,11 +447,14 @@ page.onLoadFinished = function(status) {
                 html     : node.innerHTML,
                 bound    : _utils.bound(node),
                 computed : _utils.computed(node),
-                parent   : true
+                parent   : parent
             }
 
             // push text features
             texts.push(node.__features);
+
+            // push extracted
+            ext.push(node);
 
             // debug
             node.style.border = '1px solid red';

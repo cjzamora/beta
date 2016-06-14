@@ -93,7 +93,7 @@
                 element = element.parentElement;
             }
 
-            path.sort()
+            // path.sort()
 
             return path;
         },
@@ -109,8 +109,10 @@
             var data = {};
 
             computed.forEach(function(key) {
-                // don't care about dimension, let bound track that
-                if(['width', 'height', 'top', 'left', 'right', 'bottom'].indexOf(key) !== -1) {
+                // don't care about dimension, let bound track that, we also don't care
+                // about some of the CSS3 3D properties
+                if(['width', 'height', 'top', 'left', 'right', 'bottom',
+                    'perspective-origin', 'transform-origin'].indexOf(key) !== -1) {
                     return;
                 }
 
@@ -265,7 +267,7 @@
                     continue;
                 }
 
-                setNodeFeatures(node);
+                setNodeFeatures(node, false);
             }
 
             // find the parent node that is a block
@@ -295,7 +297,7 @@
                     // just push the text
                     node.parentElement.__features.text.push(_utils.clean(_utils.trim(text.nodeValue)));
                 } else {
-                    setNodeFeatures(node.parentElement);
+                    setNodeFeatures(node.parentElement, true);
                 }
             }
 
@@ -306,7 +308,7 @@
                 continue;
             }
 
-            setNodeFeatures(node);
+            setNodeFeatures(node, true);
         }
 
         // iterate on each node
@@ -331,14 +333,16 @@
             d.style.cursor          = 'pointer';
             d.style.fontFamily      = 'Arial, sans-seif';
             d.style.fontSize        = '8px';
-            d.style.height          = '8px';
             d.style.lineHeight      = '9px';
             d.style.padding         = '0px 2px';
             d.style.position        = 'absolute';
             d.style.minWidth        = '9px';
 
+            d.setAttribute('data-annotate-parent', ext[i].__features.parent ? 'true' : 'false');
+
             if(!ext[i].__features.parent) {
                 d.style.right = '0px';
+                d.style.backgroundColor = 'rgba(0, 203, 0, 0.8)';
             }
 
             // set annotation index
@@ -347,7 +351,14 @@
             // set annotator
             d.onclick = annotateElement;
 
+            // set on mouse over
+            d.onmouseover = function (e) { e.target.parentElement.style.backgroundColor = 'rgba(0, 203, 0, 0.8)'; };
+            // set on mouse out
+            d.onmouseout = function(e) { e.target.parentElement.style.backgroundColor = ''; };
+
             ext[i].appendChild(d);
+
+            ext[i].onclick = function(e) { e.preventDefault(); console.log('ASDFASDF'); };
         }       
 
         // annotate element
@@ -369,7 +380,9 @@
         };
 
         // set node data helper
-        function setNodeFeatures(node) {
+        function setNodeFeatures(node, parent) {
+            parent = parent ? true : false;
+
             // collect features
             node.__features = {
                 label    : 'unknown',
@@ -380,7 +393,7 @@
                 html     : node.innerHTML,
                 bound    : _utils.bound(node),
                 computed : _utils.computed(node),
-                parent   : true
+                parent   : parent
             }
 
             // push text features
@@ -462,7 +475,7 @@
                 computed    : data.texts[i].computed,
                 element     : data.texts[i].element,
                 label       : data.texts[i].label,
-                path        : data.texts[i].path
+                selector    : data.texts[i].selector
             };
 
             // unknown label?

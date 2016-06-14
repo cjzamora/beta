@@ -16,7 +16,7 @@ from beta.src import utils
 
 # training_data = json.loads(open('data/training/152b50573f16ebc9172ade2da72fb218.json').read())
 training_data = utils.load_training()
-testing_data  = json.loads(open('tmp/34d300364b6528c05e9362ef8adce7d1.json').read())
+testing_data  = json.loads(open('tmp/e438a9719116551ec977e97f45fd0259.json').read())
 
 vectorizer = DictVectorizer()
 
@@ -27,6 +27,18 @@ training_labels   = training_processed['labels']
 
 training_features = training_processed['features']
 testing_features  = testing_processed['features']
+
+# index = 0
+
+# for i in training_features:
+#     for k in testing_features:
+#         if k['tag-path'] == i['tag-path'] and training_labels[index] != 'unknown':
+#             print training_labels[index]
+#             print i['tag-path']
+#             print k['tag-path']
+#             break
+
+#     index = index + 1
 
 # training_features = random.sample(training_features, len(training_features))
 
@@ -55,7 +67,7 @@ else:
     clf.fit(training_features, training_labels)
 
     # save model
-    joblib.dump(clf, 'data/models/000.pkl')
+    # joblib.dump(clf, 'data/models/000.pkl')
 
 results = clf.predict(testing_features)
 

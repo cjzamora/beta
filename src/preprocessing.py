@@ -30,14 +30,14 @@ class Processor():
             computed = i['computed']
 
             # convert units
-            # computed = self.convert_units(computed, ['font-size'])
+            computed = self.convert_units(computed)
 
             # set tag path
-            computed['tag-path'] = ' > '.join(i['path'])
+            computed['tag-path'] = self.process_selectors(i['selector'])
 
             # set bounding
-            # computed['bounding-x'] = float(i['bound']['left'])
-            # computed['bounding-y'] = float(i['bound']['top'])
+            # computed['bounding-x'] = float(i['bound']['left'] / 50)
+            # computed['bounding-y'] = float(i['bound']['top'] / 50)
             # computed['bounding-w'] = float(i['bound']['width'])
             # computed['bounding-h'] = float(i['bound']['height'])
 
@@ -115,3 +115,33 @@ class Processor():
                     computed[k] = org
 
         return computed
+
+    # consolidate selectors either just the plain
+    # element or with classes id included, we are
+    # going to build something like, div#id.cls > h1.cls etc.
+    def process_selectors(self, selectors, withIdCls=False):
+        # processed selectors
+        processed = []
+
+        # iterate on each selectors
+        for selector in selectors:
+            # tag name
+            tag = selector['name']
+
+            # do we have an id?
+            if len(selector['id']) > 0 and withIdCls == True:
+                # set id on tag
+                tag = tag + '#' + selector['id']
+
+            # do we have classes?
+            if len(selector['classes']) and withIdCls == True:
+                # combine classes
+                classes = '.'.join(selector['classes'])
+
+                # append it
+                tag = tag + '.' + classes
+
+            # push to processed
+            processed.append(tag)
+
+        return ' > '.join(processed)
