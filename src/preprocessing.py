@@ -7,6 +7,7 @@ import numpy as np
 import random
 
 class Processor():
+    # pre-defined css units
     CSS_UNITS = [
         'pt', 'px', 'vh', 'vw', 'em', '%',
         'ex', 'cm', 'mm', 'in', 'pc', 'vmin']
@@ -35,10 +36,10 @@ class Processor():
             computed['tag-path'] = ' > '.join(i['path'])
 
             # set bounding
-            # computed['bouding-x'] = float(i['bound']['left'])
-            # computed['bouding-y'] = float(i['bound']['top'])
-            # computed['bouding-w'] = int(i['bound']['width'])
-            # computed['bouding-h'] = int(i['bound']['height'])
+            # computed['bounding-x'] = float(i['bound']['left'])
+            # computed['bounding-y'] = float(i['bound']['top'])
+            # computed['bounding-w'] = float(i['bound']['width'])
+            # computed['bounding-h'] = float(i['bound']['height'])
 
             # append features
             prepared['features'].append(computed)
@@ -114,52 +115,3 @@ class Processor():
                     computed[k] = org
 
         return computed
-
-    # reduce prepared dataset to balance
-    # positive and negative samples
-    def reduce(self, object):
-        # positive data points
-        positives = []
-        # negative data points
-        negatives = []
-
-        index = 0
-
-        # iterate on each data points
-        for i in object['labels']:
-            # get negatives
-            if i == 'unknown':
-                # append it to negative
-                negatives.append({ 
-                    'label'     : i,
-                    'feature'  : object['features'][index]
-                })
-            else:
-                # append it to positives
-                positives.append({ 
-                    'label'     : i,
-                    'feature'  : object['features'][index]
-                }) 
-            
-            index = index + 1
-
-        # shuffle negatives
-        random.shuffle(negatives, random.random)
-
-        # cut negatives
-        negatives = negatives[0:100]
-
-        # stack features
-        features = np.concatenate((positives, negatives), axis=0)
-
-        # processed data
-        processed = {
-            'labels'    : [],
-            'features'  : []
-        }
-
-        for data in features:
-            processed['labels'].append(data['label'])
-            processed['features'].append(data['feature'])
-
-        return processed
