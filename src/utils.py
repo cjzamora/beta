@@ -90,6 +90,24 @@ def file_exists(path):
 
     return True
 
+# clear folder
+def clear_folder(path):
+    # get the folder path
+    folder = path
+
+    # iterate on each path in the given folder
+    for file in os.listdir(folder):
+        # get the file path
+        file_path = os.path.join(folder, file)
+
+        try:
+            # is it a file?
+            if os.path.isfile(file_path):
+                # remove it
+                os.unlink(file_path)
+        except Exception as e:
+            print(e)
+
 # load training data
 def load_training():
     # get training path
@@ -102,6 +120,7 @@ def load_training():
     for file in os.listdir(path):
         # get all json training data
         if file.endswith('json'):
+            # append the file
             files.append(os.path.join(path, file))
 
     # training data's

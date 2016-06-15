@@ -26,8 +26,8 @@ class Processor():
             # append label
             prepared['labels'].append(i['label'])
 
-            # get computed styles
-            computed = {}
+            # select properties
+            computed = self.select_properties(i['computed'])
 
             # convert units
             computed = self.convert_units(computed)
@@ -35,12 +35,14 @@ class Processor():
             # set tag path
             computed['tag-path'] = self.process_selectors(i['selector'])
 
-            # set bounding
-            # computed['bounding-x'] = float(i['bound']['left'] * 0.1)
-            # computed['bounding-y'] = float(i['bound']['top'] * 0.1)
+            # set area (requires scaling)
+            # computed['area'] = float(i['bound']['height'] * i['bound']['width'])
 
+            # set bounding (requires scaling)
+            # computed['bounding-x'] = float(i['bound']['left'])
+            # computed['bounding-y'] = float(i['bound']['top'])
             # computed['bounding-w'] = float(i['bound']['width'])
-            # computed['bounding-h'] = float(i['bound']['height'] * 0.1)
+            # computed['bounding-h'] = float(i['bound']['height'])
 
             # append features
             prepared['features'].append(computed)
@@ -146,6 +148,56 @@ class Processor():
             processed.append(tag)
 
         return ' > '.join(processed)
+
+    # select css properties
+    def select_properties(self, properties):
+        # pick this properties
+        # --------------------
+        # font-size - 12px
+        # font-weight - normal
+        # line-height - normal
+        # text-decoration - none
+        # text-align - left
+        # letter-spacing - normal
+        
+        selected = {}
+
+        # if font-size
+        if 'font-size' in properties:
+            selected['font-size'] = properties['font-size']
+        else:
+            selected['font-size'] = '12px'
+
+        # if font-weight
+        if 'font-weight' in properties:
+            selected['font-weight'] = properties['font-weight']
+        else:
+            selected['font-weight'] = 'normal'
+
+        # if line-height
+        if 'line-height' in properties:
+            selected['line-height'] = properties['line-height']
+        else:
+            selected['line-height'] = 'normal'
+
+        # if text-decoration
+        if 'text-decoration' in properties:
+            selected['text-decoration'] = properties['text-decoration']
+        else:
+            selected['text-decoration'] = 'none'
+
+        # if text-align
+        if 'text-align' in properties:
+            selected['text-align'] = properties['text-align']
+        else:
+            selected['text-align'] = 'left'
+
+        if 'letter-spacing' in properties:
+            selected['letter-spacing'] = properties['letter-spacing']
+        else:
+            selected['letter-spacing'] = '12px'
+
+        return selected
 
     # processed data samples and retain
     # unique data points to avoid collision

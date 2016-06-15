@@ -1,10 +1,187 @@
 #!/usr/bin/env python
 
+from sklearn import cross_validation
+from sklearn.metrics import precision_recall_curve, auc, classification_report, precision_recall_fscore_support
+from sklearn.externals import joblib
+from sklearn.feature_extraction import DictVectorizer
+
 import os
 import sys
 import argparse
 import subprocess
+import numpy as np
 
 sys.path.append('..')
 
 from beta.src import utils
+from beta.src.preprocessing import Processor
+from beta.src.classifier import Classifier
+
+def main(args):
+    # get the training folders
+    training = utils.get_path('training')
+    # get the models path
+    models   = utils.get_path('models')
+
+    # initialize our vectorizer
+    vectorizer = DictVectorizer()
+
+    # log
+    utils.log('[classifier] loading training samples from %s ...' % training, 'system')
+
+    # load training data
+    training_data = utils.load_training()
+
+    # log
+    utils.log('[classifier] %s of training samples loaded.' % len(training_data), 'system')
+    # log
+    utils.log('[classifier] preparing training samples ...', 'system')
+
+    # prepare samples
+    training_data = Processor().prepare_training(training_data, vectorizer)
+
+    # log
+    # utils.log('[classifier] Reducing training samples ...', 'system')
+
+    # pre-process samples
+    # training_data = Processor().unique(training_data)
+
+    # log
+    # utils.log('[classifier] %s total samples remaining after reduce.' % len(training_data['labels']), 'system')
+    
+    # log
+    utils.log('[classifier] starting classification ...', 'system')
+
+    # logging flag
+    log = False
+
+    # verbose logging?
+    if args.verbose:
+        log = True
+
+    # log
+    utils.log('[classifier] starting KFold cross validation, 3 folds.', 'system')
+
+    precisions  = []
+    recalls     = []
+    f1scores    = []
+    supports    = []
+
+    # do some cross validation
+    rs = cross_validation.KFold(len(training_data['labels']), n_folds=4, shuffle=False, random_state=0)
+
+    # iterate on each rs
+    for training_index, testing_index in rs:
+        # log
+        utils.log('[classifier] training size %s, testing_size %s' % (len(training_index), len(testing_index)), 'warning')
+
+        # get features
+        training_features = training_data['features'][training_index]
+        # get labels
+        training_labels   = np.array(training_data['labels'])[training_index]
+
+        # get features
+        testing_features = training_data['features'][testing_index]
+        # get labels
+        testing_labels   = np.array(training_data['labels'])[testing_index]
+
+        # initialize classifier
+        classifier = Classifier().svc(training_features, training_labels, log=log)
+
+        # log n support
+        utils.log('[classifier] n_support %s' % classifier.n_support_, 'warning')
+
+        # log
+        utils.log('[classifier] training: ', 'warning')
+        # get predictions
+        predicted = classifier.predict(training_features)
+        # log report
+        utils.log(classification_report(training_labels, predicted), 'success')
+
+        # log
+        utils.log('[classifier] testing: ', 'warning')
+        # get predictions
+        predicted = classifier.predict(testing_features)
+        # log report
+        utils.log(classification_report(testing_labels, predicted), 'success')
+
+        # calculate precision, recall, f1score and support
+        precision, recall, f1score, support = precision_recall_fscore_support(testing_labels, predicted)
+
+        # collect precisions
+        precisions.append(precision)
+        # collect recalls
+        recalls.append(recall)
+        # collect f1scores
+        f1scores.append(f1score)
+        # collect supports
+        supports.append(support)
+
+    # get mse
+    # precisions = np.mean(np.array(precisions), axis=0)
+    # # get mse
+    # recalls    = np.mean(np.array(recalls), axis=0)
+    # # get mse
+    # f1scores   = np.mean(np.array(f1scores), axis=0)
+    # # get mse
+    # supports   = np.mean(np.array(supports), axis=0)
+
+    # output labels
+    # for label in range(2):
+    #     print '%f\t%f\t%f\t%f' % (precisions[label], recalls[label], f1scores[label], supports[label])
+
+    sys.exit()
+
+    # initialize classifier
+    classifier = Classifier().svc(training_data['features'], training_data['labels'], log=log)
+
+    # get the target path
+    target = os.path.join(models, args.name + '.pkl')
+
+    # check if model exists
+    if utils.file_exists(target):
+        # clear folder?
+        if args.clear == 'true':
+            # log
+            utils.log('[classifier] Removing all models ...', 'system')
+
+            # clear folders
+            utils.clear_folder(models)
+
+            # save model
+            joblib.dump(classifier, target)
+
+            # log
+            utils.log('[classifier] Model saved to %s' % target, 'success')
+
+            sys.exit()
+        else:
+            # log
+            utils.log('[classifier] Model already exists.', 'error')
+
+            sys.exit()
+    else:
+        # save model
+        joblib.dump(classifier, target)
+
+        # log
+        utils.log('[classifier] Model saved to %s' % target, 'success')
+
+        sys.exit()
+
+# argument parser
+def parse_args():
+    # initialize argument parser
+    parser = argparse.ArgumentParser(prog='classifier', description='Classifier tool to generate trained ML Model.')
+
+    # set model name argument
+    parser.add_argument('-n', '--name', nargs='?', const=str, required=True, help='name of model output.')
+    # set clear model argument
+    parser.add_argument('-c', '--clear', nargs='?', const=bool, required=False, help='clear models before training')
+    # set verbose logging in training
+    parser.add_argument('-v', '--verbose', nargs='?', const=bool, required=False, help='verbose training')
+    
+    return parser.parse_args()
+
+if __name__ == '__main__':
+    main(parse_args());
