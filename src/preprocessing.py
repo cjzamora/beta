@@ -36,10 +36,11 @@ class Processor():
             computed['tag-path'] = self.process_selectors(i['selector'])
 
             # set bounding
-            # computed['bounding-x'] = float(i['bound']['left'] / 50)
-            # computed['bounding-y'] = float(i['bound']['top'] / 50)
+            # computed['bounding-x'] = float(i['bound']['left'] * 0.1)
+            # computed['bounding-y'] = float(i['bound']['top'] * 0.1)
+
             # computed['bounding-w'] = float(i['bound']['width'])
-            # computed['bounding-h'] = float(i['bound']['height'])
+            # computed['bounding-h'] = float(i['bound']['height'] * 0.1)
 
             # append features
             prepared['features'].append(computed)
@@ -145,3 +146,33 @@ class Processor():
             processed.append(tag)
 
         return ' > '.join(processed)
+
+    # processed data samples and retain
+    # unique data points to avoid collision
+    # between positive and negative data points
+    def unique(self, samples):
+        # get the features
+        features = samples['features']
+
+        # iterate on the array
+        processed = (np.ascontiguousarray(features)
+        .view(np.dtype((np.void, features.dtype.itemsize * features.shape[1]))))
+
+        # get the unique set of arrays
+        _, idx = np.unique(processed, return_index=True)
+
+        # get unique labels
+        labels = []
+
+        # iterate on each indexes
+        for i in idx:
+            # get the label
+            labels.append(samples['labels'][i])
+
+        # return new label and feature set
+        unique = {
+            'labels'   : labels,
+            'features' : features[idx]
+        }
+
+        return unique
