@@ -5,6 +5,7 @@ import numpy as np
 import simplejson as json
 import sys
 import random
+import time
 
 sys.path.append('..')
 
@@ -16,16 +17,18 @@ from beta.src import utils
 
 # training_data = json.loads(open('data/training/152b50573f16ebc9172ade2da72fb218.json').read())
 training_data = utils.load_training()
-testing_data  = json.loads(open('tmp/34d300364b6528c05e9362ef8adce7d1.json').read())
+testing_data  = json.loads(open('tmp/dbbf011da15037c9c3a5e3753226a5f5.json').read())
 
 vectorizer = DictVectorizer()
 
 training_processed = Processor().prepare_training(training_data, vectorizer)
 testing_processed  = Processor().prepare_testing(testing_data['texts'], vectorizer)
 
-print len(training_processed['features'])
+print 'Before reduce: %s training samples.' % len(training_processed['features'])
 training_processed = Processor().unique(training_processed)
-print len(training_processed['features'])
+print 'After reduce: %s training samples.' % len(training_processed['features'])
+
+time.sleep(5)
 
 training_labels   = training_processed['labels']
 

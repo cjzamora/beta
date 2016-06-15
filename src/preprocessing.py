@@ -27,7 +27,7 @@ class Processor():
             prepared['labels'].append(i['label'])
 
             # get computed styles
-            computed = i['computed']
+            computed = {}
 
             # convert units
             computed = self.convert_units(computed)
