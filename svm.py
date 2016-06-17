@@ -18,7 +18,7 @@ from beta.src import utils
 
 # training_data = json.loads(open('data/training/152b50573f16ebc9172ade2da72fb218.json').read())
 training_data = utils.load_training()
-testing_data  = json.loads(open('tmp/34d300364b6528c05e9362ef8adce7d1.json').read())
+testing_data  = json.loads(open('tmp/c6e69dc7d3f683757f14c2eb5deb1611.json').read())
 
 vectorizer = DictVectorizer()
 
@@ -36,22 +36,6 @@ training_labels   = training_processed['labels']
 training_features = training_processed['features']
 testing_features  = testing_processed['features']
 
-# index = 0
-
-# for i in training_features:
-#     for k in testing_features:
-        
-#         if k['tag-path'][-8:] == i['tag-path'][-8:] and training_labels[index] != 'unknown':
-#             print '---'
-#             print training_labels[index]
-#             print i['tag-path']
-#             print k['tag-path']
-#             break
-
-#     index = index + 1
-
-# sys.exit()
-
 # if model exists
 if utils.file_exists('data/models/000.pkl'):
     print 'Loading cached trained model from data/models/000.pkl'
@@ -59,10 +43,11 @@ if utils.file_exists('data/models/000.pkl'):
 else:
     print 'Learning and making the model'
     # clf = Classifier().linearSVC(training_features, training_labels)
-    # clf = Classifier().svc(training_features, training_labels)
+    clf = Classifier().svc(training_features, training_labels, True)
     # clf = Classifier().sgdClassifier(training_features, training_labels)
     # clf = Classifier().kNeighborsClassifier(training_features, training_labels)
-    clf = Classifier().gaussianNB(training_features, training_labels)
+    # clf = Classifier().gaussianNB(training_features, training_labels)
+    # clf = Classifier().ovrSVC(training_features, training_labels, True)
 
     # save model
     # joblib.dump(clf, 'data/models/000.pkl')
@@ -76,19 +61,81 @@ for i in results:
     if i != 'unknown':
         predicted[i] = []
 
+extracted = Processor().prepare(testing_data['texts'])
+
 for i in results:
     if i != 'unknown':
         text = testing_data['texts'][index]['text']
 
         if i == 'title':
-            text = text[0]
+            text = { 
+                'label'     : i,
+                'tag'       : testing_data['texts'][index]['element']['name'],
+                'computed'  : extracted['features'][index], 
+                'text'      : text[0] 
+            }
 
         if i == 'description':
-            text = '\n'.join(text[1:])
+            text = { 
+                'label'    : i,
+                'tag'      : testing_data['texts'][index]['element']['name'],
+                'computed' : extracted['features'][index],
+                'text'     : '\n'.join(text[1:]) 
+            }
 
         predicted[i].append(text)
 
     index = index + 1
 
-utils.pretty(predicted)
+# utils.pretty(predicted)
 utils.write_file('public/test_results.json', predicted, True)
+
+
+
+# -------->
+
+
+
+def score_titles(object):
+    threshold = {
+        'x'     : [20, 500],
+        'y'     : [120, 500],
+        'size'  : 13
+    }
+
+    tags = ['h1', 'h2', 'div']
+
+    min_score = 2.0
+
+    # filter non empty text
+    object = [i for i in object if len(i['text']) > 0]
+
+    titles = []
+
+    for i in object:
+        # above our threshold?
+        if ((i['computed']['x'] >= threshold['x'][0]
+        and i['computed']['x'] <= threshold['x'][1])
+        and (i['computed']['y'] >= threshold['y'][0]
+        and  i['computed']['y'] <= threshold['y'][1])):
+            i['score'] = 0.0
+
+            titles.append(i)
+
+    for i in titles:
+        if i['tag'] in tags:
+            i['score'] += 1.0
+
+        if i['computed']['font-size'] > threshold['size']:
+            i['score'] += 1.0
+
+    final = []
+
+    for i in titles:
+        if i['score'] >= min_score:
+            final.append(i)
+
+
+    utils.pretty(final)
+
+score_titles(predicted['title'])

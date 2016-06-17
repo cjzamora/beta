@@ -1,20 +1,1109 @@
 {
-  "srp": [
-    [
-      "959.99",
-      "₱",
-      "959.99"
-    ]
-  ],
-  "discounted": [
-    [
-      "₱ 1,995.00,"
-    ]
-  ],
-  "description": [
-    "Brings sophistication and function together with the\nCasio Illuminator\n. Movement durability and integrity are ensured by outstanding case construction to protect against damage and keep settings accurate. Stepping out in the rain? Not a problem. Perfect even for the outdoors, this watch features water-resistance up to 100 meters. Durable stainless steel straps accompanied by a tenacious fold-over clasp work together to withstand the rigors of your day.\nA timepiece that never goes out of style, your Casio Illuminator Watch is designed to be the perfect complement to any outfit from day to night. Sport the Casio Men's Watch from the workplace to casual meetings and tell time at a glance. Fashion fads come and go, but the classic look of Casio delivers wardrobe versatility that you can count on for years to come.\nCasio\ntimepieces provide accurate time information anywhere, all the time. They boast rich functionality that provides users with a variety of useful data, not just the time. Casio aims to provide watches that allow people to expand their horizons and enjoy life more.\nFashion-forward Lazada\nKeep up with what’s hot and trendy, effortlessly. No need to sweat going to the mall for the best items on sale today--Lazada has it all and more for you. Whether going low-key in simple\ntees\n, or dressing to kill in\nformalwear\n, the Casio Watch is a powerful accessory that instantly fits the bill. Complete your look with other apparel and\naccessories\navailable in the Fashion section for effortless, trendy style.\nOther Features:\n-1/100-second stopwatch\n-Measuring capacity: 23:59'59.99\"\n-Measuring modes: Elapsed time, split time, 1st-2nd place times\n-12/24-hour format\n-Accuracy: ±30 seconds per month\n-Alarms: 5 independent alarms (one-time or daily)\n-Approx. battery life: 10 years on CR2025\n-Full auto-calendar (to year 2099)\n-Button operation tone on/off\n-Countdown timer\n-Measuring unit: 1/10 second\n-Input range: 1 second to 24 hours (1-second increments, 1-minute increments and 1-hour increments)\n-Hourly time signal\n-LED light\n-Auto light switch, selectable illumination duration, afterglow\n-Mulit Time (4 different cities)\n-Regular timekeeping\n-Analog: 3 hands (Hour, minute, stopwatch seconds),\n-3 dials (second, stopwatch hours and minutes)\n-World Time\n-31 time zones (48 cities + coordinated universal time), daylight saving on/off, Home city/World time city swapping\n-Size of case / total weight: AE-1000W 48.1 X 43.7 X 13.7 mm / 40 g"
-  ],
   "title": [
-    "Casio Illuminator Men's Black Resin Strap Watch AE-1000W-1AVDF"
+    {
+      "text": "",
+      "tag": "a",
+      "computed": {
+        "font-size": 14.0,
+        "text-decoration": "none",
+        "y": 63,
+        "x": 933.8125,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "Sell Your Item Now",
+      "tag": "span",
+      "computed": {
+        "font-size": 14.0,
+        "text-decoration": "none",
+        "y": 73,
+        "x": 982.8125,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "ul",
+      "computed": {
+        "font-size": 14.0,
+        "text-decoration": "none",
+        "y": 20,
+        "x": 921.375,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "li",
+      "computed": {
+        "font-size": 14.0,
+        "text-decoration": "none",
+        "y": 21,
+        "x": 940.375,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "div",
+      "computed": {
+        "font-size": 14.0,
+        "text-decoration": "none",
+        "y": 22,
+        "x": 939.375,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "a",
+      "computed": {
+        "font-size": 14.0,
+        "text-decoration": "none",
+        "y": 24,
+        "x": 938.375,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "My account",
+      "tag": "span",
+      "computed": {
+        "font-size": 14.0,
+        "text-decoration": "none",
+        "y": 23,
+        "x": 972.25,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "Register",
+      "tag": "a",
+      "computed": {
+        "font-size": 14.0,
+        "text-decoration": "none",
+        "y": 25,
+        "x": 1056.40625,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "div",
+      "computed": {
+        "font-size": 14.0,
+        "text-decoration": "none",
+        "y": 67,
+        "x": 657.5,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "div",
+      "computed": {
+        "font-size": 14.0,
+        "text-decoration": "none",
+        "y": 68,
+        "x": 656.5,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "div",
+      "computed": {
+        "font-size": 14.0,
+        "text-decoration": "none",
+        "y": 69,
+        "x": 655.5,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "div",
+      "computed": {
+        "font-size": 12.0,
+        "text-decoration": "none",
+        "y": 72,
+        "x": 654.5,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "div",
+      "computed": {
+        "font-size": 12.0,
+        "text-decoration": "none",
+        "y": 73,
+        "x": 686.5,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "span",
+      "computed": {
+        "font-size": 12.0,
+        "text-decoration": "none",
+        "y": 73,
+        "x": 686.5,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "label",
+      "computed": {
+        "font-size": 12.0,
+        "text-decoration": "none",
+        "y": 80,
+        "x": 661.5,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "div",
+      "computed": {
+        "font-size": 12.0,
+        "text-decoration": "none",
+        "y": 73,
+        "x": 655.5,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "span",
+      "computed": {
+        "font-size": 14.0,
+        "text-decoration": "none",
+        "y": 112,
+        "x": 792.3125,
+        "font-weight": 300.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "span",
+      "computed": {
+        "font-size": 14.0,
+        "text-decoration": "none",
+        "y": 122,
+        "x": 807.3125,
+        "font-weight": 300.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "2% DP to Move-in, Rent to Own 10 Yrs 2 BR Condo in Ortigas Pasig",
+      "tag": "h1",
+      "computed": {
+        "font-size": 22.0,
+        "text-decoration": "none",
+        "y": 135,
+        "x": 158.5,
+        "font-weight": 300.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "Address",
+      "tag": "div",
+      "computed": {
+        "font-size": 11.0,
+        "text-decoration": "none",
+        "y": 207,
+        "x": 160.5,
+        "font-weight": 300.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "Condition",
+      "tag": "div",
+      "computed": {
+        "font-size": 11.0,
+        "text-decoration": "none",
+        "y": 207,
+        "x": 380.5,
+        "font-weight": 300.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "Bathrooms",
+      "tag": "div",
+      "computed": {
+        "font-size": 11.0,
+        "text-decoration": "none",
+        "y": 207,
+        "x": 463.5,
+        "font-weight": 300.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "Bedrooms",
+      "tag": "div",
+      "computed": {
+        "font-size": 11.0,
+        "text-decoration": "none",
+        "y": 207,
+        "x": 553.5,
+        "font-weight": 300.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "td",
+      "computed": {
+        "font-size": 11.0,
+        "text-decoration": "none",
+        "y": 206,
+        "x": 638.5,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "Floor Area",
+      "tag": "div",
+      "computed": {
+        "font-size": 11.0,
+        "text-decoration": "none",
+        "y": 207,
+        "x": 638.5,
+        "font-weight": 300.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "53.85",
+      "tag": "div",
+      "computed": {
+        "font-size": 11.0,
+        "text-decoration": "none",
+        "y": 237,
+        "x": 636.5,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "div",
+      "computed": {
+        "font-size": 14.0,
+        "text-decoration": "none",
+        "y": 297,
+        "x": 451.5,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "a",
+      "computed": {
+        "font-size": 14.0,
+        "text-decoration": "none",
+        "y": 482,
+        "x": 652.5,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "span",
+      "computed": {
+        "font-size": 14.0,
+        "text-decoration": "none",
+        "y": 483,
+        "x": 653.5,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "li",
+      "computed": {
+        "font-size": 14.0,
+        "text-decoration": "none",
+        "y": 738,
+        "x": 507.109375,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "li",
+      "computed": {
+        "font-size": 14.0,
+        "text-decoration": "none",
+        "y": 738,
+        "x": 574.03125,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "li",
+      "computed": {
+        "font-size": 14.0,
+        "text-decoration": "none",
+        "y": 738,
+        "x": 640.953125,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "0905-610-95XX",
+      "tag": "span",
+      "computed": {
+        "font-size": 18.0,
+        "text-decoration": "none",
+        "y": 1549,
+        "x": 370.015625,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "0905-610-9510",
+      "tag": "span",
+      "computed": {
+        "font-size": 22.0,
+        "text-decoration": "none",
+        "y": 0,
+        "x": 0,
+        "font-weight": 300.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "Send Seller a Message",
+      "tag": "h3",
+      "computed": {
+        "font-size": 19.0,
+        "text-decoration": "none",
+        "y": 1647,
+        "x": 157.5,
+        "font-weight": 300.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "div",
+      "computed": {
+        "font-size": 14.0,
+        "text-decoration": "none",
+        "y": 1953,
+        "x": 741.5,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "div",
+      "computed": {
+        "font-size": 14.0,
+        "text-decoration": "none",
+        "y": 1954,
+        "x": 742.5,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "div",
+      "computed": {
+        "font-size": 14.0,
+        "text-decoration": "none",
+        "y": 1955,
+        "x": 743.5,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "Next Result",
+      "tag": "a",
+      "computed": {
+        "font-size": 12.0,
+        "text-decoration": "none",
+        "y": 1956,
+        "x": 1013.203125,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "div",
+      "computed": {
+        "font-size": 14.0,
+        "text-decoration": "none",
+        "y": 1994,
+        "x": 743.5,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "9 views",
+      "tag": "strong",
+      "computed": {
+        "font-size": 11.0,
+        "text-decoration": "none",
+        "y": 2004,
+        "x": 750.5,
+        "font-weight": 300.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "ul",
+      "computed": {
+        "font-size": 14.0,
+        "text-decoration": "none",
+        "y": 2025,
+        "x": 744.5,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "li",
+      "computed": {
+        "font-size": 14.0,
+        "text-decoration": "none",
+        "y": 2026,
+        "x": 745.5,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "Price:",
+      "tag": "strong",
+      "computed": {
+        "font-size": 10.0,
+        "text-decoration": "none",
+        "y": 2032,
+        "x": 751.5,
+        "font-weight": 300.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "span",
+      "computed": {
+        "font-size": 18.0,
+        "text-decoration": "none",
+        "y": 2032,
+        "x": 847.5,
+        "font-weight": 300.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "₱ 48,425",
+      "tag": "span",
+      "computed": {
+        "font-size": 18.0,
+        "text-decoration": "none",
+        "y": 2032,
+        "x": 848.5,
+        "font-weight": 300.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "li",
+      "computed": {
+        "font-size": 14.0,
+        "text-decoration": "none",
+        "y": 2059,
+        "x": 745.5,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "span",
+      "computed": {
+        "font-size": 13.0,
+        "text-decoration": "none",
+        "y": 2065,
+        "x": 847.5,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "div",
+      "computed": {
+        "font-size": 13.0,
+        "text-decoration": "none",
+        "y": 2066,
+        "x": 848.5,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "div",
+      "computed": {
+        "font-size": 13.0,
+        "text-decoration": "none",
+        "y": 2067,
+        "x": 849.5,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "span",
+      "computed": {
+        "font-size": 18.0,
+        "text-decoration": "none",
+        "y": 2068,
+        "x": 850.5,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "0905-610-95XX",
+      "tag": "span",
+      "computed": {
+        "font-size": 18.0,
+        "text-decoration": "none",
+        "y": 2077,
+        "x": 880.515625,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "span",
+      "computed": {
+        "font-size": 18.0,
+        "text-decoration": "none",
+        "y": 2077,
+        "x": 880.515625,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "Display number",
+      "tag": "a",
+      "computed": {
+        "font-size": 13.0,
+        "text-decoration": "none",
+        "y": 2108,
+        "x": 850.5,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "ul",
+      "computed": {
+        "font-size": 13.0,
+        "text-decoration": "none",
+        "y": 2127,
+        "x": 848.5,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "li",
+      "computed": {
+        "font-size": 13.0,
+        "text-decoration": "none",
+        "y": 2128,
+        "x": 849.5,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "span",
+      "computed": {
+        "font-size": 22.0,
+        "text-decoration": "none",
+        "y": 0,
+        "x": 0,
+        "font-weight": 300.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "span",
+      "computed": {
+        "font-size": 22.0,
+        "text-decoration": "none",
+        "y": 0,
+        "x": 0,
+        "font-weight": 300.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "li",
+      "computed": {
+        "font-size": 14.0,
+        "text-decoration": "none",
+        "y": 2138,
+        "x": 745.5,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "span",
+      "computed": {
+        "font-size": 13.0,
+        "text-decoration": "none",
+        "y": 2144,
+        "x": 847.5,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "ul",
+      "computed": {
+        "font-size": 14.0,
+        "text-decoration": "none",
+        "y": 2179,
+        "x": 744.5,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "li",
+      "computed": {
+        "font-size": 14.0,
+        "text-decoration": "none",
+        "y": 2180,
+        "x": 745.5,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "Date Posted:",
+      "tag": "strong",
+      "computed": {
+        "font-size": 10.0,
+        "text-decoration": "none",
+        "y": 2186,
+        "x": 751.5,
+        "font-weight": 300.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "5 minutes ago (17 June 2016)",
+      "tag": "span",
+      "computed": {
+        "font-size": 13.0,
+        "text-decoration": "none",
+        "y": 2186,
+        "x": 847.5,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "Location:",
+      "tag": "strong",
+      "computed": {
+        "font-size": 10.0,
+        "text-decoration": "none",
+        "y": 2218,
+        "x": 750.5,
+        "font-weight": 300.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "li",
+      "computed": {
+        "font-size": 14.0,
+        "text-decoration": "none",
+        "y": 2213,
+        "x": 745.5,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "span",
+      "computed": {
+        "font-size": 13.0,
+        "text-decoration": "none",
+        "y": 2219,
+        "x": 847.5,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "Pasig, Metro Manila",
+      "tag": "a",
+      "computed": {
+        "font-size": 13.0,
+        "text-decoration": "none",
+        "y": 2221,
+        "x": 848.5,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "li",
+      "computed": {
+        "font-size": 14.0,
+        "text-decoration": "none",
+        "y": 2246,
+        "x": 745.5,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "p",
+      "computed": {
+        "font-size": 14.0,
+        "text-decoration": "none",
+        "y": 2329,
+        "x": 798.5,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "span",
+      "computed": {
+        "font-size": 18.0,
+        "text-decoration": "none",
+        "y": 2330,
+        "x": 799.5,
+        "font-weight": 300.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "Charm Villaverde",
+      "tag": "a",
+      "computed": {
+        "font-size": 18.0,
+        "text-decoration": "none",
+        "y": 2332,
+        "x": 800.5,
+        "font-weight": 300.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "Spam",
+      "tag": "strong",
+      "computed": {
+        "font-size": 14.0,
+        "text-decoration": "none",
+        "y": 0,
+        "x": 0,
+        "font-weight": 300.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "Wrong category",
+      "tag": "strong",
+      "computed": {
+        "font-size": 14.0,
+        "text-decoration": "none",
+        "y": 0,
+        "x": 0,
+        "font-weight": 300.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "Prohibited Ads & Illegal Services",
+      "tag": "strong",
+      "computed": {
+        "font-size": 14.0,
+        "text-decoration": "none",
+        "y": 0,
+        "x": 0,
+        "font-weight": 300.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "Sold Advertisement",
+      "tag": "strong",
+      "computed": {
+        "font-size": 14.0,
+        "text-decoration": "none",
+        "y": 0,
+        "x": 0,
+        "font-weight": 300.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "Scam",
+      "tag": "strong",
+      "computed": {
+        "font-size": 14.0,
+        "text-decoration": "none",
+        "y": 0,
+        "x": 0,
+        "font-weight": 300.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "Misleading Information",
+      "tag": "strong",
+      "computed": {
+        "font-size": 14.0,
+        "text-decoration": "none",
+        "y": 0,
+        "x": 0,
+        "font-weight": 300.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "1000",
+      "tag": "b",
+      "computed": {
+        "font-size": 11.0,
+        "text-decoration": "none",
+        "y": 0,
+        "x": 0,
+        "font-weight": 300.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "Thank you for reporting.",
+      "tag": "h4",
+      "computed": {
+        "font-size": 14.0,
+        "text-decoration": "none",
+        "y": 0,
+        "x": 0,
+        "font-weight": 300.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "a",
+      "computed": {
+        "font-size": 12.0,
+        "text-decoration": "none",
+        "y": 3147,
+        "x": 1048.5,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "",
+      "tag": "span",
+      "computed": {
+        "font-size": 12.0,
+        "text-decoration": "none",
+        "y": 3147,
+        "x": 1049.5,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "Next Ad",
+      "tag": "span",
+      "computed": {
+        "font-size": 12.0,
+        "text-decoration": "none",
+        "y": 3149,
+        "x": 1050.5,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "»",
+      "tag": "span",
+      "computed": {
+        "font-size": 12.0,
+        "text-decoration": "none",
+        "y": 3149,
+        "x": 1097.484375,
+        "font-weight": 200.0,
+        "font-style": 1
+      },
+      "label": "title"
+    },
+    {
+      "text": "Ibenta mo na!",
+      "tag": "strong",
+      "computed": {
+        "font-size": 14.0,
+        "text-decoration": "none",
+        "y": 3615,
+        "x": 578.890625,
+        "font-weight": 300.0,
+        "font-style": 1
+      },
+      "label": "title"
+    }
   ]
 }

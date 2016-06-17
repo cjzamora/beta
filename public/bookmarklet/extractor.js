@@ -109,21 +109,18 @@
             var data = {};
 
             computed.forEach(function(key) {
-                // don't care about dimension, let bound track that, we also don't care
-                // about some of the CSS3 3D properties
-                if(['width', 'height', 'top', 'left', 'right', 'bottom',
-                    'perspective-origin', 'transform-origin'].indexOf(key) !== -1) {
+                // don't care about dimension, let bound track that
+                if(['width', 'height', 'top', 'left', 'right', 'bottom'].indexOf(key) !== -1) {
                     return;
                 }
 
-                // don't care about webkit specific
-                if(key.charAt(0) === '-') {
-                    return;
-                }
-
-                // don't care about default value
-                if(computed[key] === defaults[key]
-                && ['font-weight'].indexOf(key) === -1) {
+                // our target properties
+                if([
+                    'font-size',
+                    'font-style',
+                    'font-weight',
+                    'text-decoration'
+                ].indexOf(key) === -1) {
                     return;
                 }
 
@@ -224,7 +221,7 @@
             bound       : _utils.bound(document.body),
             computed    : computed
         }
-    }();
+    };
 
     // extract texts
     data.texts = function() {
@@ -236,17 +233,17 @@
 
         // iterate on each node
         while(text = walker.nextNode()) {
-            // no text?
-            if(_utils.trim(text.nodeValue).length === 0) {
-                continue;
-            }
-
             // container node
             var node  = text.parentElement
             // get element bound
             var bound = _utils.bound(node);
             // get element name
             var name  = _utils.element(node, true);
+
+            // has parent node?
+            if(!node) {
+                continue;
+            }
 
             // skip styles and scripts
             if(['style', 'script', 'noscript'].indexOf(name) !== -1) {
@@ -259,7 +256,7 @@
             }
 
             // has inner text?
-            if(node.innerText.length > 0) {
+            if(node.innerText && node.innerText.length > 0) {
                 // have we seen this node?
                 if(node.__features) {
                     // just push the text
@@ -270,25 +267,25 @@
                 setNodeFeatures(node, false);
             }
 
-            // find the parent node that is a block
-            while(node) {
-                // get computed styles
-                // var computed = document.defaultView.getComputedStyle(node);
-                var computed = window.getComputedStyle(node);
+            // // find the parent node that is a block
+            // while(node) {
+            //     // get computed styles
+            //     // var computed = document.defaultView.getComputedStyle(node);
+            //     var computed = window.getComputedStyle(node);
 
-                // do we find the block parent?
-                if((parseInt(computed.width) * parseInt(computed.height)) > 0) {
-                    break;
-                }
+            //     // do we find the block parent?
+            //     if((parseInt(computed.width) * parseInt(computed.height)) > 0) {
+            //         break;
+            //     }
 
-                // get parent element
-                node = node.parentElement;
+            //     // get parent element
+            //     node = node.parentElement;
 
-                // still a valid node?
-                if(!node) {
-                    break;
-                }
-            }
+            //     // still a valid node?
+            //     if(!node) {
+            //         break;
+            //     }
+            // }
 
             // parent element is ul?
             if(node.parentElement.tagName == 'UL') {
@@ -358,7 +355,7 @@
 
             ext[i].appendChild(d);
 
-            ext[i].onclick = function(e) { e.preventDefault(); console.log('ASDFASDF'); };
+            ext[i].onclick = function(e) { e.preventDefault(); };
         }       
 
         // annotate element
@@ -367,6 +364,13 @@
             var label   = prompt('Enter element label: ');
             // get node index
             var id      = e.target.getAttribute('data-annotate-id');
+
+            // remove element?
+            if(label == 'rem') {
+                e.target.parentElement.style.backgroundColor = '';
+                e.target.parentElement.removeChild(this);
+                return;
+            }
 
             // if label is valid
             if(LABELS.indexOf(label) === -1) {

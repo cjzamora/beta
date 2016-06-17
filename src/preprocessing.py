@@ -5,6 +5,7 @@ from sklearn.feature_extraction import DictVectorizer
 
 import numpy as np
 import random
+import math
 
 class Processor():
     # pre-defined css units
@@ -26,23 +27,16 @@ class Processor():
             # append label
             prepared['labels'].append(i['label'])
 
-            # select properties
-            computed = self.select_properties(i['computed'])
+            # get computed
+            computed = i['computed']
 
             # convert units
             computed = self.convert_units(computed)
 
-            # set tag path
-            computed['tag-path'] = self.process_selectors(i['selector'])
-
-            # set area (requires scaling)
-            # computed['area'] = float(i['bound']['height'] * i['bound']['width'])
-
-            # set bounding (requires scaling)
-            # computed['bounding-x'] = float(i['bound']['left'])
-            # computed['bounding-y'] = float(i['bound']['top'])
-            # computed['bounding-w'] = float(i['bound']['width'])
-            # computed['bounding-h'] = float(i['bound']['height'])
+            # get x position
+            computed['x'] = i['bound']['left']
+            # get y position
+            computed['y'] = i['bound']['top']
 
             # append features
             prepared['features'].append(computed)
@@ -58,10 +52,10 @@ class Processor():
         prepared['features'] = vectorizer.fit_transform(prepared['features']).toarray()
 
         # convert vector, i don't know if this will take effect
-        prepared['features'] = np.array(prepared['features']).astype(np.float32)
+        # prepared['features'] = np.array(prepared['features']).astype(np.float32)
 
         # scale features
-        # prepared['features'] = preprocessing.scale(prepared['features'])
+        prepared['features'] = preprocessing.scale(prepared['features'])
 
         return prepared
 
@@ -74,18 +68,16 @@ class Processor():
         prepared['features'] = vectorizer.transform(prepared['features']).toarray()
 
         # convert vector, i don't know if this will take effect
-        prepared['features'] = np.array(prepared['features']).astype(np.float32)
+        # prepared['features'] = np.array(prepared['features']).astype(np.float32)
 
         # scale features
-        # prepared['features'] = preprocessing.scale(prepared['features'])
+        prepared['features'] = preprocessing.scale(prepared['features'])
 
         return prepared
 
     # process css units into decimal
-    # representation with optional
-    # parameter to select the styles
-    # that needs to be converted
-    def convert_units(self, object, filter=[]):
+    # representation.
+    def convert_units(self, object):
         computed = {}
 
         # iterate on each computed styles
@@ -96,11 +88,6 @@ class Processor():
             per = object[k][-1:]
             # other units
             val = object[k][-2:]
-
-            # check if in filter
-            if(len(filter) <= 0 or not k in filter):
-                computed[k] = org
-                continue
 
             # multiple values? e.g (0px 1px)
             if len(org.split(' ')) > 1:
@@ -116,6 +103,41 @@ class Processor():
                     computed[k] = float(org[0:-2])
                 except:
                     computed[k] = org
+            else:
+                computed[k] = org
+
+            # font style?
+            if k == 'font-style':
+                defaults = {
+                    'initial' : 0,
+                    'inherit' : 0,
+                    'normal'  : 1,
+                    'italic'  : 2,
+                    'oblique' : 3
+                }
+
+                # in defaults?
+                if(org in defaults):
+                    computed[k] = defaults[org]
+                else:
+                    computed[k] = float(org)
+
+            # font-weight?
+            if k == 'font-weight':
+                defaults = {
+                    'inherit' : 200,
+                    'initial' : 200,
+                    'lighter' : 100,
+                    'bold'    : 300,
+                    'bolder'  : 400,
+                    'normal'  : 200
+                }
+
+                # in defaults?
+                if(org in defaults):
+                    computed[k] = float(defaults[org])
+                else:
+                    computed[k] = float(org)
 
         return computed
 
@@ -148,56 +170,6 @@ class Processor():
             processed.append(tag)
 
         return ' > '.join(processed)
-
-    # select css properties
-    def select_properties(self, properties):
-        # pick this properties
-        # --------------------
-        # font-size - 12px
-        # font-weight - normal
-        # line-height - normal
-        # text-decoration - none
-        # text-align - left
-        # letter-spacing - normal
-        
-        selected = {}
-
-        # if font-size
-        if 'font-size' in properties:
-            selected['font-size'] = properties['font-size']
-        else:
-            selected['font-size'] = '12px'
-
-        # if font-weight
-        if 'font-weight' in properties:
-            selected['font-weight'] = properties['font-weight']
-        else:
-            selected['font-weight'] = 'normal'
-
-        # if line-height
-        if 'line-height' in properties:
-            selected['line-height'] = properties['line-height']
-        else:
-            selected['line-height'] = 'normal'
-
-        # if text-decoration
-        if 'text-decoration' in properties:
-            selected['text-decoration'] = properties['text-decoration']
-        else:
-            selected['text-decoration'] = 'none'
-
-        # if text-align
-        if 'text-align' in properties:
-            selected['text-align'] = properties['text-align']
-        else:
-            selected['text-align'] = 'left'
-
-        if 'letter-spacing' in properties:
-            selected['letter-spacing'] = properties['letter-spacing']
-        else:
-            selected['letter-spacing'] = '12px'
-
-        return selected
 
     # processed data samples and retain
     # unique data points to avoid collision

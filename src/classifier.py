@@ -20,7 +20,7 @@ class Classifier:
             coef0=0.0, 
             shrinking=True, 
             probability=True, 
-            tol=0.001, 
+            tol=0.005, 
             cache_size=2000, 
             class_weight='balanced', 
             verbose=log, 
@@ -33,10 +33,33 @@ class Classifier:
 
         return classifier
 
+    # ovr-svc
+    def ovrSVC(self, features, labels, log=False):
+        # initialze ovr
+        ovr = OneVsRestClassifier(SVC(
+            C=1.0, 
+            kernel='linear', 
+            degree=3, 
+            gamma='auto', 
+            coef0=0.0, 
+            shrinking=True, 
+            probability=True, 
+            tol=0.001, 
+            cache_size=2000, 
+            class_weight='balanced', 
+            verbose=log, 
+            max_iter=-1, 
+            decision_function_shape=None, 
+            random_state=None), n_jobs=1)
+
+        ovr.fit(features, labels)
+
+        return ovr
+
     # linear svc
-    def linearSVC(self, features, labels):
+    def linearSVC(self, features, labels, log=False):
         # initialize linear svc
-        classifier = svm.LinearSVC()
+        classifier = svm.LinearSVC(verbose=log)
 
         # fit training features with labels
         classifier.fit(features, labels)

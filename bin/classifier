@@ -39,15 +39,6 @@ def main(args):
 
     # prepare samples
     training_data = Processor().prepare_training(training_data, vectorizer)
-
-    # log
-    # utils.log('[classifier] Reducing training samples ...', 'system')
-
-    # pre-process samples
-    # training_data = Processor().unique(training_data)
-
-    # log
-    # utils.log('[classifier] %s total samples remaining after reduce.' % len(training_data['labels']), 'system')
     
     # log
     utils.log('[classifier] starting classification ...', 'system')
@@ -60,7 +51,7 @@ def main(args):
         log = True
 
     # log
-    utils.log('[classifier] starting KFold cross validation, 3 folds.', 'system')
+    utils.log('[classifier] starting KFold cross validation, 4 folds.', 'system')
 
     precisions  = []
     recalls     = []
@@ -86,10 +77,10 @@ def main(args):
         testing_labels   = np.array(training_data['labels'])[testing_index]
 
         # initialize classifier
-        classifier = Classifier().svc(training_features, training_labels, log=log)
+        classifier = Classifier().linearSVC(training_features, training_labels, log=log)
 
         # log n support
-        utils.log('[classifier] n_support %s' % classifier.n_support_, 'warning')
+        # utils.log('[classifier] n_support %s' % classifier.n_support_, 'warning')
 
         # log
         utils.log('[classifier] training: ', 'warning')
@@ -133,7 +124,7 @@ def main(args):
     sys.exit()
 
     # initialize classifier
-    classifier = Classifier().svc(training_data['features'], training_data['labels'], log=log)
+    classifier = Classifier().linearSVC(training_data['features'], training_data['labels'], log=log)
 
     # get the target path
     target = os.path.join(models, args.name + '.pkl')
