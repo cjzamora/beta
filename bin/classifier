@@ -53,11 +53,6 @@ def main(args):
     # log
     utils.log('[classifier] starting KFold cross validation, 4 folds.', 'system')
 
-    precisions  = []
-    recalls     = []
-    f1scores    = []
-    supports    = []
-
     # do some cross validation
     rs = cross_validation.KFold(len(training_data['labels']), n_folds=4, shuffle=False, random_state=0)
 
@@ -77,10 +72,10 @@ def main(args):
         testing_labels   = np.array(training_data['labels'])[testing_index]
 
         # initialize classifier
-        classifier = Classifier().linearSVC(training_features, training_labels, log=log)
+        classifier = Classifier().svc(training_features, training_labels, log=log)
 
         # log n support
-        # utils.log('[classifier] n_support %s' % classifier.n_support_, 'warning')
+        utils.log('[classifier] n_support %s' % classifier.n_support_, 'warning')
 
         # log
         utils.log('[classifier] training: ', 'warning')
@@ -96,35 +91,8 @@ def main(args):
         # log report
         utils.log(classification_report(testing_labels, predicted), 'success')
 
-        # calculate precision, recall, f1score and support
-        precision, recall, f1score, support = precision_recall_fscore_support(testing_labels, predicted)
-
-        # collect precisions
-        precisions.append(precision)
-        # collect recalls
-        recalls.append(recall)
-        # collect f1scores
-        f1scores.append(f1score)
-        # collect supports
-        supports.append(support)
-
-    # get mse
-    # precisions = np.mean(np.array(precisions), axis=0)
-    # # get mse
-    # recalls    = np.mean(np.array(recalls), axis=0)
-    # # get mse
-    # f1scores   = np.mean(np.array(f1scores), axis=0)
-    # # get mse
-    # supports   = np.mean(np.array(supports), axis=0)
-
-    # output labels
-    # for label in range(2):
-    #     print '%f\t%f\t%f\t%f' % (precisions[label], recalls[label], f1scores[label], supports[label])
-
-    sys.exit()
-
     # initialize classifier
-    classifier = Classifier().linearSVC(training_data['features'], training_data['labels'], log=log)
+    classifier = Classifier().svc(training_data['features'], training_data['labels'], log=log)
 
     # get the target path
     target = os.path.join(models, args.name + '.pkl')

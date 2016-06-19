@@ -20,7 +20,7 @@ class Classifier:
             coef0=0.0, 
             shrinking=True, 
             probability=True, 
-            tol=0.005, 
+            tol=0.001, 
             cache_size=2000, 
             class_weight='balanced', 
             verbose=log, 

@@ -22,7 +22,7 @@ def main(args):
 
     # site already extracted?
     if utils.file_exists(output_path + '.json'):
-        print 'site already extracted.'
+        utils.log('[extractor] site already extracted.', 'warning')
         sys.exit()
 
     # check if render
@@ -44,7 +44,6 @@ def main(args):
 
     utils.log('[extractor] %s extracted, output saved to %s' % (args.url, output_path + '.json'), 'success')
     
-
 # argument parser
 def parse_args():
     # initialize argument parser

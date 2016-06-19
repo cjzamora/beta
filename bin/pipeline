@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 
+from sklearn.feature_extraction import DictVectorizer
+from sklearn.externals import joblib
+
 import os
 import sys
 import argparse
@@ -8,3 +11,146 @@ import subprocess
 sys.path.append('..')
 
 from beta.src import utils
+from beta.src.preprocessing import Processor
+from beta.src.evaluate import Evaluate
+
+def main(args):
+    # get extractor path
+    extractor = os.path.join(utils.get_path('bin'), 'extractor')
+    # generate site id
+    site_id   = utils.process_url(args.url)['site_id']
+
+    # generate command
+    command = extractor + ' -u %s'
+
+    #log
+    utils.log('[pipeline] Executing Extractor ...', 'system')
+    # execute extractor
+    subprocess.call(command % args.url, shell=True)
+
+    # get model path
+    model = os.path.join(utils.get_path('models'), args.model + '.pkl')
+
+    # log
+    utils.log('[pipeline] Loading trained model %s ...' % args.model, 'system')
+
+    # trained model
+    classifier = None
+
+    try:
+        # load model
+        classifier = joblib.load(model)
+
+        # log
+        utils.log('[pipeline] Model %s has been loaded.' % args.model, 'success')
+    except:
+        utils.log('[pipeline] An error occured while loading the model, Model does not exists.', 'error')
+        sys.exit()
+
+    # log
+    utils.log('[pipeline] Loading extracted data %s ...' % site_id, 'system')
+
+    # get tmp folder
+    tmp = os.path.join(utils.get_path('tmp'), site_id + '.json')
+
+    try:
+        # load extracted data
+        testing_data = utils.read_file(tmp, True)
+
+        # log
+        utils.log('[pipeline] Extracted data %s has been loaded.' % site_id, 'success')
+    except:
+        # log
+        utils.log('[pipeline] Unable to load extracted data.', 'error')
+        sys.exit()
+
+    # start processing data
+    process(classifier, testing_data)
+
+# process extracted data
+def process(classifier, testing_data):
+    # log
+    utils.log('[pipeline] Processing extracted data ...', 'system')
+
+    # initialize vectorizer
+    vectorizer = DictVectorizer()
+
+    # prepare original features
+    texts = Processor().prepare(testing_data['texts'])
+
+    # prepare testing data
+    testing_processed = Processor().prepare_testing(testing_data['texts'], vectorizer)
+
+    # get the features
+    testing_features = testing_processed['features']
+
+    # log
+    utils.log('[pipeline] Extracted data has been processed.', 'success')
+
+    # log
+    utils.log('[pipeline] Starting predictions ...', 'system')
+
+    # start prediction
+    results = classifier.predict(testing_features)
+
+    # predicted data
+    predicted = {}
+    # index
+    index     = 0
+
+    # iterate on each results
+    for i in results:
+        # not unknown?
+        if i != 'unknown':
+            # get the text
+            text = testing_data['texts'][index]['text']
+
+            # if not yet set
+            if not i in predicted:
+                predicted[i] = []
+
+            # generate information
+            data = {
+                'label'     : i,
+                'tag'       : testing_data['texts'][index]['element']['name'],
+                'og'        : testing_data['texts'][index]['ogprop'],
+                'computed'  : texts['features'][index]
+            }
+
+            # is it title?
+            if i == 'title':
+                data['text'] = text[0]
+
+            # or description?
+            if i == 'description':
+                data['text'] = '\n'.join(text[1:])
+
+            # append the information
+            predicted[i].append(data)
+
+        index = index + 1
+
+    # log
+    utils.log('[pipeline] Evaluating results ...', 'system')
+
+    # start scoring results
+    scored = Evaluate(testing_data, predicted, results).score(min_score=2.0)
+
+    # log
+    utils.log('[pipeline] Results has been evaluated ...', 'success')
+
+    utils.pretty(scored)
+# argument parser
+def parse_args():
+    # initialize argument parser
+    parser = argparse.ArgumentParser(prog='pipeline', description='Extraction Pipeline')
+
+    # set url argument
+    parser.add_argument('-u', '--url', nargs='?', const=str, required=True, help='webpage url to extract e.g http://somesite.ph/product/124')
+    # set model argument
+    parser.add_argument('-m', '--model', nargs='?', const=int, required=False, help='trained model to be used for prediction')
+
+    return parser.parse_args()
+
+if __name__ == '__main__':
+    main(parse_args());

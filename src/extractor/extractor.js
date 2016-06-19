@@ -40,7 +40,7 @@ page.onLoadFinished = function(status) {
         return phantom.exit();
     }
 
-    var data        = {};
+    var data = {};
 
     // put up our helpers
     page.evaluate(function() {
@@ -445,6 +445,11 @@ page.onLoadFinished = function(status) {
         function setNodeFeatures(node, parent) {
             parent = parent ? true : false;
 
+            // empty?
+            if(![_utils.clean(_utils.trim(text.nodeValue))].join('').length) {
+                return;
+            }
+
             // collect features
             node.__features = {
                 label    : 'unknown',
@@ -455,6 +460,7 @@ page.onLoadFinished = function(status) {
                 html     : node.innerHTML,
                 bound    : _utils.bound(node),
                 computed : _utils.computed(node),
+                ogprop   : node.getAttribute('itemprop'),
                 parent   : parent
             }
 
@@ -522,8 +528,14 @@ page.onLoadFinished = function(status) {
     return phantom.exit();
 };
 
+if(system.args[1].indexOf('?') !== -1) {
+    var query = system.args[1].substring(system.args[1].indexOf('?') + 1);
+
+    system.args[1] += '?' + query;
+}
+
 // invalid arguments?
-if(system.args.length < 3) {
+if(system.args.length < 2) {
     console.log('usage: phantomjs ' + system.args[0] + ' <url> <label> [<render>]');
     phantom.exit();
 }

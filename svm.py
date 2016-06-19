@@ -6,6 +6,7 @@ import simplejson as json
 import sys
 import random
 import time
+import math
 
 sys.path.append('..')
 
@@ -18,7 +19,7 @@ from beta.src import utils
 
 # training_data = json.loads(open('data/training/152b50573f16ebc9172ade2da72fb218.json').read())
 training_data = utils.load_training()
-testing_data  = json.loads(open('tmp/c6e69dc7d3f683757f14c2eb5deb1611.json').read())
+testing_data  = json.loads(open('tmp/ee080d57ea0bf3fdfa2b06a1d0c0bfad.json').read())
 
 vectorizer = DictVectorizer()
 
@@ -26,7 +27,7 @@ training_processed = Processor().prepare_training(training_data, vectorizer)
 testing_processed  = Processor().prepare_testing(testing_data['texts'], vectorizer)
 
 print 'Before reduce: %s training samples.' % len(training_processed['features'])
-# training_processed = Processor().unique(training_processed)
+training_processed = Processor().unique(training_processed)
 print 'After reduce: %s training samples.' % len(training_processed['features'])
 
 time.sleep(5)
@@ -98,7 +99,7 @@ utils.write_file('public/test_results.json', predicted, True)
 
 def score_titles(object):
     threshold = {
-        'x'     : [20, 500],
+        'x'     : [20, 900],
         'y'     : [120, 500],
         'size'  : 13
     }
@@ -110,27 +111,35 @@ def score_titles(object):
     # filter non empty text
     object = [i for i in object if len(i['text']) > 0]
 
+    # list of titles
     titles = []
 
+    # coordinates scoring
     for i in object:
+        x = math.ceil(float(i['computed']['x']))
+        y = math.ceil(float(i['computed']['y']))
+        
         # above our threshold?
-        if ((i['computed']['x'] >= threshold['x'][0]
-        and i['computed']['x'] <= threshold['x'][1])
-        and (i['computed']['y'] >= threshold['y'][0]
-        and  i['computed']['y'] <= threshold['y'][1])):
+        if ((float(x) >= float(threshold['x'][0])
+        and  float(x) <= float(threshold['x'][1]))
+        and float((y) >= float(threshold['y'][0])
+        and  float(y) <= float(threshold['y'][1]))):
             i['score'] = 0.0
 
             titles.append(i)
 
+    # feature scoring
     for i in titles:
         if i['tag'] in tags:
             i['score'] += 1.0
 
-        if i['computed']['font-size'] > threshold['size']:
+        if i['computed']['font-size'] >= threshold['size']:
             i['score'] += 1.0
 
+    # final results
     final = []
 
+    # iterate on each high score
     for i in titles:
         if i['score'] >= min_score:
             final.append(i)

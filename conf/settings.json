@@ -14,6 +14,6 @@
         "extractor"     : "src/extractor/extractor.js"
     },
     "commands" : {
-        "phantomjs" : "phantomjs %(extractor)s %(url)s %(output)s %(render)s > %(output)s.log 2>&1"
+        "phantomjs" : "phantomjs %(extractor)s \"%(url)s\" %(output)s %(render)s > /dev/null 2>&1"
     }
 }
