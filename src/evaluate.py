@@ -64,6 +64,26 @@ class Evaluate:
         else:
             print None
 
+        # swap discounted and srp whoever is higher
+        if (len(self.prediction['discounted']) > 0
+        and len(self.prediction['srp']) > 0):
+            a = self.prediction['srp'][0]
+            b = self.prediction['discounted'][0]
+
+            # srp greater than discounted?
+            if float(a['text']) < float(b['text']):
+                temp = a['text']
+                a['text'] = b['text']
+                b['text'] = temp
+                
+            self.prediction['srp'][0] = a
+            self.prediction['discounted'][0] = b
+
+
+        # now let's find the most used
+        # currency on the document.
+        self.prediction['currency'] = self.find_currency()
+
         return self.prediction
 
     # score title based on the
@@ -493,6 +513,50 @@ class Evaluate:
         score = (total_sep + total_num + total_cur) - total_alpha
 
         return score
+
+    # find currency on the document
+    def find_currency(self):
+        # holds all the document text
+        texts = []
+
+        # iterate on each document text
+        for i in self.document['texts']:
+            # append the text on our list
+            for k in i['text']:
+                texts.append(k)
+
+        # holds the list of currencies
+        currencies = {}
+
+        # for each signs
+        for i in self.signs:
+            # set current score
+            currencies[i] = 0
+
+        # iterate on each currencies
+        for i in currencies:
+            # iterate on each text
+            for k in texts:
+                # do we found this currency?
+                if k.find(i) != -1:
+                    # increment score
+                    currencies[i] += 1
+
+        # highest score
+        highest  = 0
+        # common currency
+        currency = None
+
+        # on each currencies
+        for i in currencies:
+            # is it higher then before?
+            if currencies[i] > 0:
+                # set highest score
+                highest  = currencies[i]
+                # set the currency
+                currency = i
+
+        return currency
 
     # sort out based on highest score
     def sort_results(self, data):
