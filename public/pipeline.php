@@ -32,7 +32,21 @@ if(!empty($_POST) && isset($_POST['url'])) {
 
     // if debug
     if(isset($_GET['debug'])) {
-        print file_get_contents($log);
+        $data = file_get_contents($log);
+
+        // remove output if exists
+        if(file_exists($output)) {
+            // remove output
+            unlink($output);
+        }
+
+        // remove log if exists
+        if(file_exists($log)) {
+            // remove log
+            unlink($log);
+        }
+
+        die($data);
     }
 
     // set header

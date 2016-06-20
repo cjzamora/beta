@@ -2,6 +2,7 @@
 
 import math
 import utils
+import re
 
 from preprocessing import Processor
 from tokenizers import EnglishTokenizer, GenericTokenizer
@@ -19,7 +20,7 @@ class Evaluate:
     # minimum score
     min_score = 5.0
     # currency signs
-    signs = [u'\u20b1', 'PHP ', 'P ']
+    signs = [u'\u20b1', 'PHP ']
     # most used currency
     currency = None
 
@@ -44,29 +45,31 @@ class Evaluate:
         if 'title' in self.prediction:
             self.prediction['title'] = self.score_title(self.prediction['title'])
         else:
-            print None
+            self.prediction['title'] = []
 
         # is description set?
         if 'description' in self.prediction:
             self.prediction['description'] = self.score_description(self.prediction['description'])
         else:
-            print None
+            self.prediction['description'] = []
 
         # is srp set?
         if 'srp' in self.prediction:
             self.prediction['srp'] = self.score_srp(self.prediction['srp'])
         else:
-            print None
+            self.prediction['srp'] = []
 
         # is discounted set?
         if 'discounted' in self.prediction:
             self.prediction['discounted'] = self.score_discounted(self.prediction['discounted'])
         else:
-            print None
+            self.prediction['discounted'] = []
 
         # swap discounted and srp whoever is higher
-        if (len(self.prediction['discounted']) > 0
-        and len(self.prediction['srp']) > 0):
+        if (('srp' in self.prediction
+        and 'discounted' in self.prediction) 
+        and (len(self.prediction['discounted']) > 0
+        and len(self.prediction['srp']) > 0)):
             a = self.prediction['srp'][0]
             b = self.prediction['discounted'][0]
 
@@ -75,7 +78,7 @@ class Evaluate:
                 temp = a['text']
                 a['text'] = b['text']
                 b['text'] = temp
-                
+
             self.prediction['srp'][0] = a
             self.prediction['discounted'][0] = b
 
@@ -83,6 +86,9 @@ class Evaluate:
         # now let's find the most used
         # currency on the document.
         self.prediction['currency'] = self.find_currency()
+
+        # oh shoot!, we also need to find the image!
+        self.prediction['images'] = []
 
         return self.prediction
 
@@ -504,6 +510,10 @@ class Evaluate:
             else:
                 total_alpha += 1
 
+        # no separator?
+        if total_sep == 0:
+            return 0
+
         # check for currency sign
         for i in signs:
             if string.startswith(i):
@@ -554,7 +564,7 @@ class Evaluate:
                 # set highest score
                 highest  = currencies[i]
                 # set the currency
-                currency = i
+                currency = i.strip()
 
         return currency
 

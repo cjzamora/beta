@@ -161,7 +161,7 @@ def make_dir(path):
 
 # pretty print object
 def pretty(object):
-    print json.dumps(object, indent=2).encode('utf8')
+    print json.dumps(object, indent=3).encode('utf8')
 
 # log colors
 def log(message, type='default', newlines=0):

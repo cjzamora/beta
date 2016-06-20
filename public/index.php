@@ -20,4 +20,6 @@ if(isset($_POST['training'])) {
     } catch (\Exception $e) {
         die('Unable to save training data.');
     }
+} else {
+    die('<code>Machine Learning Product Extractor.<code/>');
 }
