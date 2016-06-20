@@ -50,7 +50,6 @@ class Processor():
 
         # vectorize features
         prepared['features'] = vectorizer.fit_transform(prepared['features']).toarray()
-
         # convert vector, i don't know if this will take effect
         # prepared['features'] = np.array(prepared['features']).astype(np.float32)
 
@@ -65,7 +64,7 @@ class Processor():
         prepared = self.prepare(object)
 
         # vectorize features
-        prepared['features'] = vectorizer.fit_transform(prepared['features']).toarray()
+        prepared['features'] = vectorizer.transform(prepared['features']).toarray()
 
         # convert vector, i don't know if this will take effect
         # prepared['features'] = np.array(prepared['features']).astype(np.float32)

@@ -39,7 +39,7 @@ def main(args):
 
     # prepare samples
     training_data = Processor().prepare_training(training_data, vectorizer)
-    
+
     # log
     utils.log('[classifier] starting classification ...', 'system')
 
@@ -54,51 +54,53 @@ def main(args):
     utils.log('[classifier] starting KFold cross validation, 4 folds.', 'system')
 
     # do some cross validation
-    rs = cross_validation.KFold(len(training_data['labels']), n_folds=4, shuffle=False, random_state=0)
+    # rs = cross_validation.KFold(len(training_data['labels']), n_folds=4, shuffle=False, random_state=0)
 
     # iterate on each rs
-    for training_index, testing_index in rs:
-        # log
-        utils.log('[classifier] training size %s, testing_size %s' % (len(training_index), len(testing_index)), 'warning')
+    # for training_index, testing_index in rs:
+    #     # log
+    #     utils.log('[classifier] training size %s, testing_size %s' % (len(training_index), len(testing_index)), 'warning')
 
-        # get features
-        training_features = training_data['features'][training_index]
-        # get labels
-        training_labels   = np.array(training_data['labels'])[training_index]
+    #     # get features
+    #     training_features = training_data['features'][training_index]
+    #     # get labels
+    #     training_labels   = np.array(training_data['labels'])[training_index]
 
-        # get features
-        testing_features = training_data['features'][testing_index]
-        # get labels
-        testing_labels   = np.array(training_data['labels'])[testing_index]
+    #     # get features
+    #     testing_features = training_data['features'][testing_index]
+    #     # get labels
+    #     testing_labels   = np.array(training_data['labels'])[testing_index]
 
-        # initialize classifier
-        classifier = Classifier().svc(training_features, training_labels, log=log)
+    #     # initialize classifier
+    #     classifier = Classifier().svc(training_features, training_labels, log=log)
 
-        # log n support
-        utils.log('[classifier] n_support %s' % classifier.n_support_, 'warning')
+    #     # log n support
+    #     utils.log('[classifier] n_support %s' % classifier.n_support_, 'warning')
 
-        # log
-        utils.log('[classifier] training: ', 'warning')
-        # get predictions
-        predicted = classifier.predict(training_features)
-        # log report
-        utils.log(classification_report(training_labels, predicted), 'success')
+    #     # log
+    #     utils.log('[classifier] training: ', 'warning')
+    #     # get predictions
+    #     predicted = classifier.predict(training_features)
+    #     # log report
+    #     utils.log(classification_report(training_labels, predicted), 'success')
 
-        # log
-        utils.log('[classifier] testing: ', 'warning')
-        # get predictions
-        predicted = classifier.predict(testing_features)
-        # log report
-        utils.log(classification_report(testing_labels, predicted), 'success')
+    #     # log
+    #     utils.log('[classifier] testing: ', 'warning')
+    #     # get predictions
+    #     predicted = classifier.predict(testing_features)
+    #     # log report
+    #     utils.log(classification_report(testing_labels, predicted), 'success')
 
     # initialize classifier
-    classifier = Classifier().svc(training_data['features'], training_data['labels'], log=log)
+    classifier = Classifier().svc(training_data['features'], training_data['labels'])
 
-    # get the target path
-    target = os.path.join(models, args.name + '.pkl')
+    # get the output path for model
+    output_model = os.path.join(models, args.name + '.pkl')
+    # get the output path for vectorizer
+    output_vect  = os.path.join(models, args.name + '-vectorizer.pkl')
 
     # check if model exists
-    if utils.file_exists(target):
+    if utils.file_exists(output_model):
         # clear folder?
         if args.clear == 'true':
             # log
@@ -108,10 +110,13 @@ def main(args):
             utils.clear_folder(models)
 
             # save model
-            joblib.dump(classifier, target)
+            joblib.dump(classifier, output_model)
+
+            # save vectorizer
+            joblib.dump(vectorizer, output_vect)
 
             # log
-            utils.log('[classifier] Model saved to %s' % target, 'success')
+            utils.log('[classifier] Model saved to %s' % output_model, 'success')
 
             sys.exit()
         else:
@@ -121,10 +126,13 @@ def main(args):
             sys.exit()
     else:
         # save model
-        joblib.dump(classifier, target)
+        joblib.dump(classifier, output_model)
+
+        # save vectorizer
+        joblib.dump(vectorizer, output_vect)
 
         # log
-        utils.log('[classifier] Model saved to %s' % target, 'success')
+        utils.log('[classifier] Model saved to %s' % output_model, 'success')
 
         sys.exit()
 

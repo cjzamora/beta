@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-from sklearn.feature_extraction import DictVectorizer
 from sklearn.externals import joblib
 
 import os
@@ -18,7 +17,7 @@ def main(args):
     # get extractor path
     extractor = os.path.join(utils.get_path('bin'), 'extractor')
     # generate site id
-    site_id   = utils.process_url(args.url)['site_id']
+    site_id   = utils.process_url(args.url.replace('\\', ''))['site_id']
 
     # generate command
     command = extractor + ' -u %s'
@@ -30,16 +29,22 @@ def main(args):
 
     # get model path
     model = os.path.join(utils.get_path('models'), args.model + '.pkl')
+    # get vectorizer path
+    vect  = os.path.join(utils.get_path('models'), args.model + '-vectorizer.pkl')
 
     # log
-    utils.log('[pipeline] Loading trained model %s ...' % args.model, 'system')
+    utils.log('[pipeline] Loading trained model and vectorizer %s ...' % args.model, 'system')
 
     # trained model
     classifier = None
+    # saved vectorizer
+    vectorizer = None
 
     try:
         # load model
         classifier = joblib.load(model)
+        # load vectorizer
+        vectorizer = joblib.load(vect)
 
         # log
         utils.log('[pipeline] Model %s has been loaded.' % args.model, 'success')
@@ -65,15 +70,12 @@ def main(args):
         sys.exit()
 
     # start processing data
-    process(classifier, testing_data)
+    process(classifier, testing_data, vectorizer)
 
 # process extracted data
-def process(classifier, testing_data):
+def process(classifier, testing_data, vectorizer):
     # log
     utils.log('[pipeline] Processing extracted data ...', 'system')
-
-    # initialize vectorizer
-    vectorizer = DictVectorizer()
 
     # prepare original features
     texts = Processor().prepare(testing_data['texts'])
@@ -93,6 +95,9 @@ def process(classifier, testing_data):
     # start prediction
     results = classifier.predict(testing_features)
 
+    # log
+    utils.log('[pipeline] Prediction completed, processing predictions ...', 'success')
+
     # predicted data
     predicted = {}
     # index
@@ -109,6 +114,10 @@ def process(classifier, testing_data):
             if not i in predicted:
                 predicted[i] = []
 
+            # check ogprop
+            if not 'ogprop' in testing_data['texts'][index]:
+                testing_data['texts'][index]['ogprop'] = ''
+
             # generate information
             data = {
                 'label'     : i,
@@ -120,10 +129,11 @@ def process(classifier, testing_data):
             # is it title?
             if i == 'title':
                 data['text'] = text[0]
-
             # or description?
-            if i == 'description':
+            elif i == 'description':
                 data['text'] = '\n'.join(text[1:])
+            else:
+                data['text'] = text[0]
 
             # append the information
             predicted[i].append(data)
@@ -134,12 +144,13 @@ def process(classifier, testing_data):
     utils.log('[pipeline] Evaluating results ...', 'system')
 
     # start scoring results
-    scored = Evaluate(testing_data, predicted, results).score(min_score=2.0)
+    scored = Evaluate(testing_data, predicted, results).score(min_score=5.0)
 
     # log
-    utils.log('[pipeline] Results has been evaluated ...', 'success')
+    utils.log('[pipeline] Results has been scored and evaluated ...', 'success')
 
     utils.pretty(scored)
+
 # argument parser
 def parse_args():
     # initialize argument parser
