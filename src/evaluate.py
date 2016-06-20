@@ -18,6 +18,10 @@ class Evaluate:
     labels = None
     # minimum score
     min_score = 5.0
+    # currency signs
+    signs = [u'\u20b1', 'PHP ', 'P ']
+    # most used currency
+    currency = None
 
     # gets the extracted data that
     # we can use later for evaluation.
@@ -294,6 +298,11 @@ class Evaluate:
         for i in srps:
             # remove low scored
             if i['score'] >= min_score:
+                # check the currency
+                for s in self.signs:
+                    if i['text'].startswith(s):
+                        i['text'] = i['text'].replace(s, '').strip().rstrip(',')
+
                 # append results
                 final.append(i)
 
@@ -307,7 +316,88 @@ class Evaluate:
         return final[0:1]
 
     def score_discounted(self, discounted):
-        return discounted[0:1]
+        # copy over discounted
+        object = discounted
+
+        # threshold
+        threshold = {
+            'x'     : [300, 900],
+            'y'     : [120, 600],
+            'size'  : 10
+        }
+
+        # possbile tags
+        tags = ['div', 'p', 'ul']
+
+        # get minimum score
+        min_score = 3
+
+        # filter non empty text
+        object = [i for i in object if len(i['text']) > 0]
+
+        # list of discounted
+        discounted = []
+
+        # coordinates scoring
+        for i in object:
+            x = math.ceil(float(i['computed']['x']))
+            y = math.ceil(float(i['computed']['y']))
+            
+            # above our threshold for coordinates?
+            if ((float(x) >= float(threshold['x'][0])
+            and  float(x) <= float(threshold['x'][1]))
+            and (float(y) >= float(threshold['y'][0])
+            and  float(y) <= float(threshold['y'][1]))):
+                # set initial score
+                i['score'] = 0.0
+
+                # append it
+                discounted.append(i)
+
+        # feature scoring
+        for i in discounted:
+            # is possbile tag?
+            if i['tag'] in tags:
+                i['score'] += 1.0
+
+            # is font size above or equal our threshold?
+            if i['computed']['font-size'] >= threshold['size']:
+                i['score'] += 1.0
+
+            # has line-through?
+            if i['computed']['text-decoration'] == 'line-through':
+                i['score'] += 1.0
+
+            # open graph?
+            if i['og'] == 'price':
+                i['score'] += 0.5
+
+            # compute price format
+            i['score'] += self.compute_price_format(i['text'])
+
+        # final results
+        final = []
+
+        # iterate on each high score
+        for i in discounted:
+            # remove low scored
+            if i['score'] >= min_score:
+                # check the currency
+                for s in self.signs:
+                    if i['text'].startswith(s):
+                        i['text'] = i['text'].replace(s, '').strip().rstrip(',')
+
+                # append results
+                final.append(i)
+
+        # do we have a result?
+        if len(final) == 0:
+            return final
+
+        # sort based on high score
+        final = self.sort_results(final)
+
+        return final[0:1]
 
     # get relavance score of the tokens
     # based on how many times it appears
@@ -362,7 +452,7 @@ class Evaluate:
         # numeric
         numeric   = '0:1:2:3:4:5:6:7:8:9'
         # signs
-        signs  = [u'\u20b1', 'PHP']
+        signs  = self.signs
 
         # total numbers
         total_num   = 0

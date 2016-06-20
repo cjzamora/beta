@@ -8,6 +8,7 @@ import subprocess
 sys.path.append(os.path.abspath(os.getcwd() + '/../'))
 sys.path.append('/usr/local/lib/python2.7/site-packages')
 
+from sklearn.metrics import precision_recall_curve, auc, classification_report, precision_recall_fscore_support
 from sklearn.externals import joblib
 
 from beta.src import utils
@@ -95,6 +96,8 @@ def process(classifier, testing_data, vectorizer, output):
 
     # start prediction
     results = classifier.predict(testing_features)
+
+    print classification_report(testing_processed['labels'], results)
 
     # log
     utils.log('[pipeline] Prediction completed, processing predictions ...', 'success')
