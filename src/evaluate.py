@@ -202,8 +202,6 @@ class Evaluate:
             if i['og'] == 'description':
                 i['score'] += 0.5
 
-        utils.pretty(descriptions)
-
         # compute relavance score of text,
         # NOTE: this is temporary, we might need
         # to change this to tf-idf or mcs if possible
@@ -230,56 +228,83 @@ class Evaluate:
         # do we have a result?
         return final[0:1]
 
-    def fallback_description(self):
+    # score srp based on the given
+    # feature same as title and description
+    # also add score if the text contains
+    # pure or atleast 90% number.
+    def score_srp(self, srps):
+        # copy over srps
+        object = srps
+
+        # threshold
         threshold = {
-            'x'     : [20, 900],
-            'y'     : [200, 1500],
+            'x'     : [300, 900],
+            'y'     : [300, 600],
             'size'  : 10
         }
 
-        # fallback data
-        fallback = []
-        # index
-        index     = 0
+        # possbile tags
+        tags = ['div', 'p', 'ul']
 
-        # iterate on each results
-        for i in self.processed['features']:
-            x = math.ceil(float(i['x']))
-            y = math.ceil(float(i['y']))
+        # get minimum score
+        min_score = 3
+
+        # filter non empty text
+        object = [i for i in object if len(i['text']) > 0]
+
+        # list of srps
+        srps = []
+
+        # coordinates scoring
+        for i in object:
+            x = math.ceil(float(i['computed']['x']))
+            y = math.ceil(float(i['computed']['y']))
             
             # above our threshold for coordinates?
-            if (not (float(x) >= float(threshold['x'][0])
+            if ((float(x) >= float(threshold['x'][0])
             and  float(x) <= float(threshold['x'][1]))
             and (float(y) >= float(threshold['y'][0])
             and  float(y) <= float(threshold['y'][1]))):
-                continue;
+                # set initial score
+                i['score'] = 0.0
 
-            # get the text
-            text = self.document['texts'][index]['text']
+                # append it
+                srps.append(i)
 
-            # check ogprop
-            if not 'ogprop' in self.document['texts'][index]:
-                self.document['texts'][index]['ogprop'] = ''
+        # feature scoring
+        for i in srps:
+            # is possbile tag?
+            if i['tag'] in tags:
+                i['score'] += 1.0
 
-            # generate information
-            data = {
-                'tag'       : self.document['texts'][index]['element']['name'],
-                'og'        : self.document['texts'][index]['ogprop'],
-                'computed'  : i,
-                'text'      : '\n'.join(text)
-            }
+            # is font size above or equal our threshold?
+            if i['computed']['font-size'] >= threshold['size']:
+                i['score'] += 1.0
 
-            # append the information
-            fallback.append(data)
+            # open graph?
+            if i['og'] == 'price':
+                i['score'] += 0.5
 
-            index = index + 1
+            i['score'] += self.compute_price_format(i['text'])
 
-        descriptions = self.score_description(fallback)
+        # final results
+        final = []
 
-        print descriptions
+        # iterate on each high score
+        for i in srps:
+            # remove low scored
+            if i['score'] >= min_score:
+                # append results
+                final.append(i)
 
-    def score_srp(self, srps):
-        return srps[0:1]
+        # do we have a result?
+        if len(final) == 0:
+            return final
+
+        # sort based on high score
+        final = self.sort_results(final)
+
+        return final[0:1]
 
     def score_discounted(self, discounted):
         return discounted[0:1]
@@ -325,6 +350,59 @@ class Evaluate:
             index = index + 1
 
         return data
+
+    # compute price format score
+    def compute_price_format(self, string):
+        # empty string?
+        if len(string) <= 0:
+            return 0
+
+        # separator
+        separator = ',:.' 
+        # numeric
+        numeric   = '0:1:2:3:4:5:6:7:8:9'
+        # signs
+        signs  = [u'\u20b1', 'PHP']
+
+        # total numbers
+        total_num   = 0
+        # total alpha
+        total_alpha = 0
+        # total separator
+        total_sep   = 0
+        # total currency
+        total_cur   = 0
+
+        # maximum alpha
+        max_alpha = 5
+
+        # total score
+        score = 0
+
+        # iterate on each characters
+        for c in string:
+            s = separator.split(':')
+            n = numeric.split(':')
+
+            # character in separator?
+            if c in s:
+                total_sep += 1
+            # character in numeric?
+            elif c in n:
+                total_num += 1
+            # it's an alpha
+            else:
+                total_alpha += 1
+
+        # check for currency sign
+        for i in signs:
+            if string.startswith(i):
+                total_cur += 1
+
+        # compute score
+        score = (total_sep + total_num + total_cur) - total_alpha
+
+        return score
 
     # sort out based on highest score
     def sort_results(self, data):
