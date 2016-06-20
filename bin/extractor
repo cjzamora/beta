@@ -5,7 +5,8 @@ import sys
 import argparse
 import subprocess
 
-sys.path.append('..')
+sys.path.append(os.path.abspath(os.getcwd() + '/../'))
+sys.path.append('/usr/local/lib/python2.7/site-packages')
 
 from beta.src import utils
 

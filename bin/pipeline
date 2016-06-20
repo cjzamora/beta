@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 
-from sklearn.externals import joblib
-
 import os
 import sys
 import argparse
 import subprocess
 
-sys.path.append('..')
+sys.path.append(os.path.abspath(os.getcwd() + '/../'))
+sys.path.append('/usr/local/lib/python2.7/site-packages')
+
+from sklearn.externals import joblib
 
 from beta.src import utils
 from beta.src.preprocessing import Processor
@@ -70,10 +71,10 @@ def main(args):
         sys.exit()
 
     # start processing data
-    process(classifier, testing_data, vectorizer)
+    process(classifier, testing_data, vectorizer, args.output)
 
 # process extracted data
-def process(classifier, testing_data, vectorizer):
+def process(classifier, testing_data, vectorizer, output):
     # log
     utils.log('[pipeline] Processing extracted data ...', 'system')
 
@@ -131,6 +132,7 @@ def process(classifier, testing_data, vectorizer):
                 data['text'] = text[0]
             # or description?
             elif i == 'description':
+                data['html'] = testing_data['texts'][index]['html']
                 data['text'] = '\n'.join(text[1:])
             else:
                 data['text'] = text[0]
@@ -149,7 +151,24 @@ def process(classifier, testing_data, vectorizer):
     # log
     utils.log('[pipeline] Results has been scored and evaluated ...', 'success')
 
+    # log
     utils.pretty(scored)
+
+    # are we going to save the output?
+    if output != None:
+        # file exists?
+        if not utils.file_exists(output):
+            # log
+            utils.log('[pipeline] Unable to save output to %s, path does not exists.', 'error')
+
+            # exit
+            sys.exit()
+
+        # write that data
+        utils.write_file(output, scored, True)
+
+        # log
+        utils.log('[pipeline] Output saved to %s' % output, 'success')
 
 # argument parser
 def parse_args():
@@ -160,6 +179,8 @@ def parse_args():
     parser.add_argument('-u', '--url', nargs='?', const=str, required=True, help='webpage url to extract e.g http://somesite.ph/product/124')
     # set model argument
     parser.add_argument('-m', '--model', nargs='?', const=int, required=False, help='trained model to be used for prediction')
+    # set output of results
+    parser.add_argument('-o', '--output', nargs='?', const=str, required=False, help='dump predicted results to this path')
 
     return parser.parse_args()
 

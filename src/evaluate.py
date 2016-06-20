@@ -236,8 +236,6 @@ class Evaluate:
         # copy over srps
         object = srps
 
-        utils.pretty(object)
-
         # threshold
         threshold = {
             'x'     : [300, 900],
