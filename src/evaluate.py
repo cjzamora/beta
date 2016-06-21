@@ -20,7 +20,7 @@ class Evaluate:
     # minimum score
     min_score = 5.0
     # currency signs
-    signs = [u'\u20b1', 'PHP ']
+    signs = [u'\u20b1', 'PHP ', 'P ', 'P']
     # most used currency
     currency = None
 
@@ -74,7 +74,7 @@ class Evaluate:
             b = self.prediction['discounted'][0]
 
             # srp greater than discounted?
-            if float(a['text'].replace(',', '')) < float(b['text'].replace(',', '')):
+            if float(a['text']) < float(b['text']):
                 temp = a['text']
                 a['text'] = b['text']
                 b['text'] = temp
@@ -273,7 +273,7 @@ class Evaluate:
         }
 
         # possbile tags
-        tags = ['div', 'span']
+        tags = ['div', 'span', 'u']
 
         # get minimum score
         min_score = 3
@@ -314,6 +314,11 @@ class Evaluate:
             if i['og'] == 'price':
                 i['score'] += 0.5
 
+            # check the currency
+            for s in self.signs:
+                if i['text'].startswith(s):
+                    i['text'] = i['text'].replace(s, '').replace(',', '').strip().rstrip(',')
+
             i['score'] += self.compute_price_format(i['text'])
 
         # final results
@@ -323,11 +328,6 @@ class Evaluate:
         for i in srps:
             # remove low scored
             if i['score'] >= min_score:
-                # check the currency
-                for s in self.signs:
-                    if i['text'].startswith(s):
-                        i['text'] = i['text'].replace(s, '').strip().rstrip(',')
-
                 # append results
                 final.append(i)
 
@@ -397,6 +397,11 @@ class Evaluate:
             if i['og'] == 'price':
                 i['score'] += 0.5
 
+            # check the currency
+            for s in self.signs:
+                if i['text'].startswith(s):
+                    i['text'] = i['text'].replace(s, '').replace(',', '').strip().rstrip(',')
+
             # compute price format
             i['score'] += self.compute_price_format(i['text'])
 
@@ -407,11 +412,6 @@ class Evaluate:
         for i in discounted:
             # remove low scored
             if i['score'] >= min_score:
-                # check the currency
-                for s in self.signs:
-                    if i['text'].startswith(s):
-                        i['text'] = i['text'].replace(s, '').strip().rstrip(',')
-
                 # append results
                 final.append(i)
 
@@ -492,8 +492,6 @@ class Evaluate:
         total_alpha = 0
         # total separator
         total_sep   = 0
-        # total currency
-        total_cur   = 0
 
         # maximum alpha
         max_alpha = 5
@@ -520,13 +518,8 @@ class Evaluate:
         if total_sep == 0:
             return 0
 
-        # check for currency sign
-        for i in signs:
-            if string.startswith(i):
-                total_cur += 1
-
         # compute score
-        score = (total_sep + total_num + total_cur) - total_alpha
+        score = (total_sep + total_num) - total_alpha
 
         return score
 
