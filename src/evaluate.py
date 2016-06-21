@@ -74,7 +74,7 @@ class Evaluate:
             b = self.prediction['discounted'][0]
 
             # srp greater than discounted?
-            if float(a['text']) < float(b['text']):
+            if float(a['text'].replace(',', '')) < float(b['text'].replace(',', '')):
                 temp = a['text']
                 a['text'] = b['text']
                 b['text'] = temp
@@ -110,7 +110,7 @@ class Evaluate:
         }
 
         # possible tags
-        tags = ['h1', 'h2', 'div', 'span']
+        tags = ['h1', 'h2', 'div']
 
         # get minimum score
         min_score = self.min_score
@@ -268,13 +268,13 @@ class Evaluate:
 
         # threshold
         threshold = {
-            'x'     : [300, 900],
+            'x'     : [90, 900],
             'y'     : [120, 600],
             'size'  : 10
         }
 
         # possbile tags
-        tags = ['div', 'p', 'ul']
+        tags = ['div', 'span']
 
         # get minimum score
         min_score = 3
@@ -347,19 +347,21 @@ class Evaluate:
 
         # threshold
         threshold = {
-            'x'     : [300, 900],
+            'x'     : [90, 900],
             'y'     : [120, 600],
             'size'  : 10
         }
 
         # possbile tags
-        tags = ['div', 'p', 'ul']
+        tags = ['div', 'span']
 
         # get minimum score
         min_score = 3
 
         # filter non empty text
         object = [i for i in object if len(i['text']) > 0]
+
+        utils.pretty(object)
 
         # list of discounted
         discounted = []

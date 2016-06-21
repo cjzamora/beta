@@ -284,7 +284,6 @@ page.onLoadFinished = function(status) {
     // extract texts
     data.texts = page.evaluate(function() {
         var texts = [];
-        var ext   = [];
 
         // walk over all text in the page
         var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
@@ -366,81 +365,6 @@ page.onLoadFinished = function(status) {
             setNodeFeatures(node, true);
         }
 
-        // iterate on each node
-        for(var i in ext) {
-            // create element
-            var d = document.createElement('div');
-            // get node text
-            var t = ext[i].__features.text.join(' ').substring(0, 60);
-
-            // is this our annotator?
-            if(ext[i].getAttribute('data-annotate-id') !== null) {
-                continue;
-            }
-
-            ext[i].style.position = 'relative';
-
-            d.innerText             = '+';
-            d.style.boxSizing       = 'border-box';
-            d.style.backgroundColor = 'rgba(255, 0, 0, 0.8)';
-            d.style.bottom          = '0px';
-            d.style.color           = '#FFFFFF';
-            d.style.cursor          = 'pointer';
-            d.style.fontFamily      = 'Arial, sans-seif';
-            d.style.fontSize        = '8px';
-            d.style.lineHeight      = '9px';
-            d.style.padding         = '0px 2px';
-            d.style.position        = 'absolute';
-            d.style.minWidth        = '9px';
-
-            d.setAttribute('data-annotate-parent', ext[i].__features.parent ? 'true' : 'false');
-
-            if(!ext[i].__features.parent) {
-                d.style.right = '0px';
-                d.style.backgroundColor = 'rgba(0, 203, 0, 0.8)';
-            }
-
-            // set annotation index
-            d.setAttribute('data-annotate-id', i);
-
-            // set annotator
-            d.onclick = annotateElement;
-
-            // set on mouse over
-            d.onmouseover = function (e) { e.target.parentElement.style.backgroundColor = 'rgba(0, 203, 0, 0.8)'; };
-            // set on mouse out
-            d.onmouseout = function(e) { e.target.parentElement.style.backgroundColor = ''; };
-
-            ext[i].appendChild(d);
-
-            ext[i].onclick = function(e) { e.preventDefault(); };
-        }       
-
-        // annotate element
-        function annotateElement(e) {
-            // get annotation label
-            var label   = prompt('Enter element label: ');
-            // get node index
-            var id      = e.target.getAttribute('data-annotate-id');
-
-            // remove element?
-            if(label == 'rem') {
-                e.target.parentElement.backgroundColor = '';
-                e.target.parentElement.removeChild(this);
-                return;
-            }
-
-            // if label is valid
-            if(LABELS.indexOf(label) === -1) {
-                return;
-            }
-
-            // set annotation label
-            data.texts[id].label = label;
-            // set text
-            e.target.innerText = e.target.innerText + ' (' + label.toUpperCase() + ') ';
-        };
-
         // set node data helper
         function setNodeFeatures(node, parent) {
             parent = parent ? true : false;
@@ -467,11 +391,8 @@ page.onLoadFinished = function(status) {
             // push text features
             texts.push(node.__features);
 
-            // push extracted
-            ext.push(node);
-
             // debug
-            node.style.border = '1px solid red';
+            // node.style.border = '1px solid red';
         };
 
         return texts;

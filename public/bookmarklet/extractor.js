@@ -320,7 +320,9 @@
                 continue;
             }
 
-            ext[i].style.position = 'relative';
+            if(ext[i].style.position == '') {
+                ext[i].style.position = 'relative';
+            }
 
             d.innerText             = '+';
             d.style.boxSizing       = 'border-box';
@@ -407,7 +409,7 @@
             ext.push(node);
 
             // debug
-            node.style.border = '1px solid red';
+            // node.style.border = '1px solid red';
         };
 
         return texts;
@@ -439,7 +441,7 @@
             });
 
             // debug
-            el.style.border = '1px solid red';
+            // el.style.border = '1px solid red';
         })
 
         return images;

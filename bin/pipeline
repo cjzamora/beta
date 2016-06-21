@@ -22,7 +22,7 @@ def main(args):
     site_id   = utils.process_url(args.url.replace('\\', ''))['site_id']
 
     # generate command
-    command = extractor + ' -u %s'
+    command = extractor + ' -u %s -i true'
 
     #log
     utils.log('[pipeline] Executing Extractor ...', 'system')
