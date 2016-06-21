@@ -10,6 +10,8 @@ class TermFrequencyAnalyzer(object):
     def __init__(self, *documents):
         self.idf = self.compute_idf(*documents)
 
+        print self.idf
+
     def compute_idf(self, *documents):
         # document frequency
         df = collections.defaultdict(int)

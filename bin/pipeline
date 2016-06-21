@@ -10,6 +10,7 @@ sys.path.append('/usr/local/lib/python2.7/site-packages')
 
 from sklearn.metrics import precision_recall_curve, auc, classification_report, precision_recall_fscore_support
 from sklearn.externals import joblib
+from BeautifulSoup import BeautifulSoup
 
 from beta.src import utils
 from beta.src.preprocessing import Processor
@@ -97,8 +98,6 @@ def process(classifier, testing_data, vectorizer, output):
     # start prediction
     results = classifier.predict(testing_features)
 
-    print classification_report(testing_processed['labels'], results)
-
     # log
     utils.log('[pipeline] Prediction completed, processing predictions ...', 'success')
 
@@ -122,10 +121,13 @@ def process(classifier, testing_data, vectorizer, output):
             if not 'ogprop' in testing_data['texts'][index]:
                 testing_data['texts'][index]['ogprop'] = ''
 
+            soup = BeautifulSoup(testing_data['texts'][index]['html'])
+
             # generate information
             data = {
                 'label'     : i,
                 'tag'       : testing_data['texts'][index]['element']['name'],
+                'classes'   : testing_data['texts'][index]['element']['classes'],
                 'og'        : testing_data['texts'][index]['ogprop'],
                 'computed'  : texts['features'][index]
             }
@@ -136,7 +138,7 @@ def process(classifier, testing_data, vectorizer, output):
             # or description?
             elif i == 'description':
                 data['html'] = testing_data['texts'][index]['html']
-                data['text'] = '\n'.join(text[1:])
+                data['text'] = soup.getText()
             else:
                 data['text'] = text[0]
 

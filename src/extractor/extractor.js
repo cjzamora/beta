@@ -347,11 +347,11 @@ page.onLoadFinished = function(status) {
             // parent element is ul?
             if(node.parentElement.tagName == 'UL') {
                 // have we seen this node?
-                if(node.parentElement.__features) {
+                if(node.parentElement.parentElement.__features) {
                     // just push the text
-                    node.parentElement.__features.text.push(_utils.clean(_utils.trim(text.nodeValue)));
+                    node.parentElement.parentElement.__features.text.push(_utils.clean(_utils.trim(text.nodeValue)));
                 } else {
-                    setNodeFeatures(node.parentElement, true);
+                    setNodeFeatures(node.parentElement.parentElement, true);
                 }
             }
 

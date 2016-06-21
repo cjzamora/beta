@@ -34,12 +34,13 @@ def main(args):
     training_data = utils.load_training()
 
     # log
-    utils.log('[classifier] %s of training samples loaded.' % len(training_data), 'system')
+    utils.log('[classifier] training samples has been loaded', 'system')
     # log
     utils.log('[classifier] preparing training samples ...', 'system')
 
     # prepare samples
     training_data = Processor().prepare_training(training_data, vectorizer)
+    training_data = Processor().unique(training_data)
 
     # log
     utils.log('[classifier] starting classification ...', 'system')

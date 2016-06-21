@@ -82,7 +82,6 @@ class Evaluate:
             self.prediction['srp'][0] = a
             self.prediction['discounted'][0] = b
 
-
         # now let's find the most used
         # currency on the document.
         self.prediction['currency'] = self.find_currency()
@@ -110,7 +109,7 @@ class Evaluate:
         }
 
         # possible tags
-        tags = ['h1', 'h2', 'div']
+        tags = ['h1', 'h2', 'h3', 'h4', 'div']
 
         # get minimum score
         min_score = self.min_score
@@ -185,8 +184,8 @@ class Evaluate:
 
         # threshold
         threshold = {
-            'x'     : [20, 900],
-            'y'     : [200, 1500],
+            'x'     : [0, 900],
+            'y'     : [0, 1500],
             'size'  : 10
         }
 
@@ -222,7 +221,7 @@ class Evaluate:
         for i in descriptions:
             # is possbile tag?
             if i['tag'] in tags:
-                i['score'] += 1.0
+                i['score'] += 2.0
 
             # is font size above or equal our threshold?
             if i['computed']['font-size'] >= threshold['size']:
@@ -361,8 +360,6 @@ class Evaluate:
         # filter non empty text
         object = [i for i in object if len(i['text']) > 0]
 
-        utils.pretty(object)
-
         # list of discounted
         discounted = []
 
@@ -474,6 +471,13 @@ class Evaluate:
         # empty string?
         if len(string) <= 0:
             return 0
+
+        # able to parse?
+        try:
+            string = float(string)
+            string = str(string)
+        except:
+            pass
 
         # separator
         separator = ',:.' 
